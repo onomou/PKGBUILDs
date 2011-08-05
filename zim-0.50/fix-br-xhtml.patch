@@ -1,0 +1,11 @@
+--- /usr/lib/python2.7/site-packages/zim/formats/html.py.bak	2011-02-27 10:36:38.725751906 -0800
++++ /usr/lib/python2.7/site-packages/zim/formats/html.py	2011-02-27 10:36:53.835879802 -0800
+@@ -40,7 +40,7 @@
+ 
+ def encode_whitespace(text):
+ 	if not text is None:
+-		text = text.replace('\n', '<br>\n')
++		text = text.replace('\n', '<br />\n')
+ 		text = _indent_re.sub(_replace_indent, text)
+ 		return text
+ 	else:

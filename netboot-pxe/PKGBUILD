@@ -1,0 +1,23 @@
+# Contributor: Garrett <http://www.floft.net/contact>
+# used: http://howto.gumph.org/content/pxe-boot-a-laptop/
+pkgname=netboot-pxe
+pkgver=0.9.8
+pkgrel=1
+pkgdesc="Remote boot a computer over an IP network without access to a harddisk or a diskette."
+arch=('i686' 'x86_64')
+url='http://netboot.sourceforge.net/'
+license=('GPL')
+source=(http://downloads.sourceforge.net/netboot/netboot-${pkgver}.tar.gz)
+#for 0.10.2: md5sums=('9ed71342ec1dfa8d09441dc238d92ded')
+md5sums=('2c4c83c3d7743b73247e2acdda79919d')
+
+build() {
+ cd "${srcdir}/netboot-${pkgver}"
+ ./configure --prefix="${pkgdir}/usr"
+ make
+}
+
+package() {
+ cd "${srcdir}/netboot-${pkgver}"
+ make DESTDIR="${pkgdir}/" install
+}

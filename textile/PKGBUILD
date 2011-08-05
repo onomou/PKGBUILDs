@@ -1,0 +1,24 @@
+pkgname=textile
+pkgver=2.0.0
+pkgrel=1
+pkgdesc="A Humane Web Text Generator"
+arch=('any')
+url="http://textile.thresholdstate.com/"
+license=('custom')
+depends=('php')
+source=("http://textile.thresholdstate.com/file_download/2/$pkgname-$pkgver.tar.gz"
+	"textile.php"
+	"textile.patch")
+md5sums=("c4f2454b16227236e01fc1c761366fe3"
+	 "2aa6677a82efefb435bef5da22ffc491"
+	 "0ef6ee9bfde48bb0976c11d0ef7497eb")
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  patch -p1 -i "$srcdir/textile.patch" "classTextile.php"
+  install -Dm644 "classTextile.php" "$pkgdir/usr/share/webapps/textile/classTextile.php"
+  install -Dm755 "$srcdir/textile.php" "$pkgdir/usr/bin/textile"
+  #license
+  mkdir -p "$pkgdir/usr/share/licenses/$pkgname"
+  tail -n +34 "classTextile.php" | head -n 27 > "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

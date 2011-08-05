@@ -1,0 +1,34 @@
+# $Id: PKGBUILD 40367 2011-02-23 14:19:01Z lfleischer $
+# Maintainer: Lukas Fleischer <archlinux at cryptocrack dot de>
+# Contributor: Ali H. Caliskan <ali.h.caliskan AT gmail DOT com>
+# Contributor: Ryan Coyner <rcoyner@gmail.com>
+# Contributor: Stefan Husmann <stefan-husmann@t-online.de>
+
+pkgname=mixxx
+pkgver=1.9.0
+pkgrel=2
+pkgdesc="Free, open source software for digital DJ'ing. (with volume-fade patch)"
+arch=('i686' 'x86_64')
+url='http://www.mixxx.org'
+license=('GPL')
+depends=('fftw' 'libid3tag' 'libmad' 'libogg' 'libshout' 'libsndfile' 'portaudio' 'portmidi'
+         'qt>=4.5' 'taglib')
+makedepends=('mesa' 'scons' 'libshout')
+source=("http://downloads.mixxx.org/${pkgname}-${pkgver}/${pkgname}-${pkgver}-src.tar.gz" volume-fade.patch)
+md5sums=('ea78fc81922e6c7d85d6afffd2e526b1' 'b843d2f3e78718ea3fc30d45292fc076')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"\~*
+  #volume patch
+  cd src
+  patch -p0 < $srcdir/volume-fade.patch
+  cd ..
+  #compile
+  scons qtdir=/usr/lib/qt prefix=/usr install_root="${pkgdir}/usr"
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"\~*
+  #install
+  scons qtdir=/usr/lib/qt prefix=/usr install_root="${pkgdir}/usr" install
+}

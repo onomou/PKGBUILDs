@@ -1,0 +1,1178 @@
+diff -ru cinelerra-4.2-src/cinelerra/Makefile cinelerra-demo2//cinelerra/Makefile
+--- cinelerra-4.2-src/cinelerra/Makefile	2009-11-02 12:11:09.000000000 -0800
++++ cinelerra-demo2//cinelerra/Makefile	2011-07-20 19:06:16.238536735 -0700
+@@ -285,7 +285,6 @@
+ 	$(OBJDIR)/vdevicebuz.o \
+ 	$(OBJDIR)/vdevicedvb.o \
+ 	$(OBJDIR)/vdeviceprefs.o \
+-	$(OBJDIR)/vdevicev4l.o \
+ 	$(OBJDIR)/vdevicev4l2.o \
+ 	$(OBJDIR)/vdevicev4l2jpeg.o \
+ 	$(OBJDIR)/vdevicex11.o \
+@@ -818,7 +817,6 @@
+ $(OBJDIR)/vdevicebuz.o: 			  vdevicebuz.C
+ $(OBJDIR)/vdevicedvb.o:                           vdevicedvb.C
+ $(OBJDIR)/vdeviceprefs.o: 			  vdeviceprefs.C
+-$(OBJDIR)/vdevicev4l.o: 			  vdevicev4l.C
+ $(OBJDIR)/vdevicev4l2.o:                          vdevicev4l2.C
+ $(OBJDIR)/vdevicev4l2jpeg.o:                      vdevicev4l2jpeg.C
+ $(OBJDIR)/vdevicex11.o: 			  vdevicex11.C
+Only in cinelerra-demo2//cinelerra: Makefile~
+diff -ru cinelerra-4.2-src/cinelerra/reversemake cinelerra-demo2//cinelerra/reversemake
+--- cinelerra-4.2-src/cinelerra/reversemake	2008-07-09 17:51:32.000000000 -0700
++++ cinelerra-demo2//cinelerra/reversemake	2011-07-20 19:06:55.612295159 -0700
+@@ -32,7 +32,6 @@
+ make $OBJDIR/vedits.o
+ make $OBJDIR/vedit.o
+ make $OBJDIR/vdevicex11.o
+-make $OBJDIR/vdevicev4l.o
+ make $OBJDIR/vdeviceprefs.o
+ make $OBJDIR/vdevicelml.o
+ make $OBJDIR/vdevicebuz.o
+Only in cinelerra-demo2//cinelerra: reversemake~
+diff -ru cinelerra-4.2-src/cinelerra/vdevicebuz.C cinelerra-demo2//cinelerra/vdevicebuz.C
+--- cinelerra-4.2-src/cinelerra/vdevicebuz.C	2009-08-07 01:51:16.000000000 -0700
++++ cinelerra-demo2//cinelerra/vdevicebuz.C	2011-07-20 19:20:56.384597991 -0700
+@@ -39,7 +39,7 @@
+ #include "vdevicebuz.h"
+ #include "vframe.h"
+ #include "videoconfig.h"
+-#include "videodevice.h"
++//#include "videodevice.h"
+ 
+ #include <errno.h>
+ #include <stdint.h>
+Only in cinelerra-demo2//cinelerra: vdevicebuz.C~
+diff -ru cinelerra-4.2-src/cinelerra/vdevicev4l.C cinelerra-demo2//cinelerra/vdevicev4l.C
+--- cinelerra-4.2-src/cinelerra/vdevicev4l.C	2009-08-04 11:41:16.000000000 -0700
++++ cinelerra-demo2//cinelerra/vdevicev4l.C	2011-07-20 19:07:10.645790648 -0700
+@@ -36,7 +36,7 @@
+ #include "preferences.h"
+ #include "quicktime.h"
+ #include "recordconfig.h"
+-#include "vdevicev4l.h"
++//#include "vdevicev4l.h"
+ #include "vframe.h"
+ #include "videodevice.h"
+ 
+Only in cinelerra-demo2//cinelerra: vdevicev4l.C~
+diff -ru cinelerra-4.2-src/cinelerra/vdevicev4l.h cinelerra-demo2//cinelerra/vdevicev4l.h
+--- cinelerra-4.2-src/cinelerra/vdevicev4l.h	2008-07-21 12:14:01.000000000 -0700
++++ cinelerra-demo2//cinelerra/vdevicev4l.h	2011-07-20 19:20:35.391042589 -0700
+@@ -23,7 +23,7 @@
+ #define VDEVICEV4L_H
+ 
+ #include "vdevicebase.h"
+-#include <linux/videodev.h>
++//#include <linux/videodev.h>
+ #include "videodevice.inc"
+ 
+ class VDeviceV4L : public VDeviceBase
+Only in cinelerra-demo2//cinelerra: vdevicev4l.h~
+diff -ru cinelerra-4.2-src/cinelerra/videodevice.C cinelerra-demo2//cinelerra/videodevice.C
+--- cinelerra-4.2-src/cinelerra/videodevice.C	2008-07-21 12:14:01.000000000 -0700
++++ cinelerra-demo2//cinelerra/videodevice.C	2011-07-20 19:08:32.320003517 -0700
+@@ -38,7 +38,7 @@
+ #include "vdevice1394.h"
+ #include "vdevicebuz.h"
+ #include "vdevicedvb.h"
+-#include "vdevicev4l.h"
++//#include "vdevicev4l.h"
+ #include "vdevicev4l2.h"
+ #include "vdevicev4l2jpeg.h"
+ #include "vdevicex11.h"
+@@ -193,12 +193,12 @@
+ 
+ 	switch(in_config->driver)
+ 	{
+-		case VIDEO4LINUX:
+-			keepalive = new KeepaliveThread(this);
+-			keepalive->start_keepalive();
+-			new_device_base();
+-			result = input_base->open_input();
+-			break;
++//		case VIDEO4LINUX:
++//			keepalive = new KeepaliveThread(this);
++//			keepalive->start_keepalive();
++//			new_device_base();
++//			result = input_base->open_input();
++//			break;
+ 
+ 
+ #ifdef HAVE_VIDEO4LINUX2
+@@ -247,8 +247,8 @@
+ {
+ 	switch(in_config->driver)
+ 	{
+-		case VIDEO4LINUX:
+-			return input_base = new VDeviceV4L(this);
++//		case VIDEO4LINUX:
++//			return input_base = new VDeviceV4L(this);
+ 
+ #ifdef HAVE_VIDEO4LINUX2
+ 		case VIDEO4LINUX2:
+@@ -281,9 +281,9 @@
+ 	char *path = (char*)"";
+ 	switch(vconfig_in->driver)
+ 	{
+-		case VIDEO4LINUX:
+-			path = (char*)"channels_v4l";
+-			break;
++//		case VIDEO4LINUX:
++//			path = (char*)"channels_v4l";
++//			break;
+ 		case VIDEO4LINUX2:
+ 			path = (char*)"channels_v4l2";
+ 			break;
+@@ -380,9 +380,9 @@
+ 		case PLAYBACK_BUZ:
+ 			return PLAYBACK_BUZ_TITLE;
+ 			break;
+-		case VIDEO4LINUX:
+-			return VIDEO4LINUX_TITLE;
+-			break;
++//		case VIDEO4LINUX:
++//			return VIDEO4LINUX_TITLE;
++//			break;
+ 		case VIDEO4LINUX2:
+ 			return VIDEO4LINUX2_TITLE;
+ 			break;
+Only in cinelerra-demo2//cinelerra: videodevice.C~
+diff -ru cinelerra-4.2-src/cinelerra/videodevice.h cinelerra-demo2//cinelerra/videodevice.h
+--- cinelerra-4.2-src/cinelerra/videodevice.h	2008-07-21 12:14:01.000000000 -0700
++++ cinelerra-demo2//cinelerra/videodevice.h	2011-07-20 19:06:42.618821610 -0700
+@@ -44,7 +44,7 @@
+ #include "vdevice1394.inc"
+ #include "vdevicebuz.inc"
+ #include "vdevicelml.inc"
+-#include "vdevicev4l.inc"
++//#include "vdevicev4l.inc"
+ #include "vdevicex11.inc"
+ #include "videoconfig.inc"
+ #include "videowindow.inc"
+Only in cinelerra-demo2//cinelerra: videodevice.h~
+Only in cinelerra-demo2/: configure~
+diff -ru cinelerra-4.2-src/quicktime/thirdparty/faad2-2.0/config.log cinelerra-demo2//quicktime/thirdparty/faad2-2.0/config.log
+--- cinelerra-4.2-src/quicktime/thirdparty/faad2-2.0/config.log	2011-07-20 19:16:14.141605792 -0700
++++ cinelerra-demo2//quicktime/thirdparty/faad2-2.0/config.log	2010-10-11 11:39:41.000000000 -0700
+@@ -10,16 +10,16 @@
+ ## Platform. ##
+ ## --------- ##
+ 
+-hostname = garrett
++hostname = amazon
+ uname -m = x86_64
+-uname -r = 2.6.39-ARCH
++uname -r = 2.6.28-15-generic
+ uname -s = Linux
+-uname -v = #1 SMP PREEMPT Sat Jul 9 14:57:41 CEST 2011
++uname -v = #49-Ubuntu SMP Tue Aug 18 19:25:34 UTC 2009
+ 
+ /usr/bin/uname -p = unknown
+ /bin/uname -X     = unknown
+ 
+-/bin/arch              = x86_64
++/bin/arch              = unknown
+ /usr/bin/arch -k       = unknown
+ /usr/convex/getsysinfo = unknown
+ /usr/bin/hostinfo      = unknown
+@@ -27,17 +27,19 @@
+ /usr/bin/oslevel       = unknown
+ /bin/universe          = unknown
+ 
+-PATH: /usr/local/bin
+-PATH: /usr/bin
+-PATH: /bin
++PATH: .
++PATH: /opt/cinelerra/
++PATH: /usr/local/jdk1.6.0_01/bin/
++PATH: .
++PATH: /opt/cinelerra/
++PATH: /usr/local/jdk1.6.0_01/bin/
+ PATH: /usr/local/sbin
++PATH: /usr/local/bin
+ PATH: /usr/sbin
++PATH: /usr/bin
+ PATH: /sbin
+-PATH: /opt/java/jre/bin
+-PATH: /usr/bin/vendor_perl
+-PATH: /usr/bin/core_perl
+-PATH: /opt/qt/bin
+-PATH: /opt/tigcc/bin
++PATH: /bin
++PATH: /usr/games
+ 
+ 
+ ## ----------- ##
+@@ -45,44 +47,40 @@
+ ## ----------- ##
+ 
+ configure:2079: checking for a BSD-compatible install
+-configure:2147: result: /bin/install -c
++configure:2147: result: /usr/bin/install -c
+ configure:2158: checking whether build environment is sane
+ configure:2201: result: yes
+ configure:2255: checking for gawk
+ configure:2271: found /usr/bin/gawk
+ configure:2282: result: gawk
+-configure:2293: checking whether make sets $(MAKE)
++configure:2293: checking whether make -j4 sets $(MAKE)
+ configure:2315: result: yes
+ configure:2570: checking build system type
+ configure:2588: result: x86_64-unknown-linux-gnu
+ configure:2610: checking host system type
+ configure:2625: result: x86_64-unknown-linux-gnu
+-configure:2659: checking for style of include used by make
++configure:2659: checking for style of include used by make -j4
+ configure:2687: result: GNU
+ configure:2760: checking for gcc
+ configure:2776: found /usr/bin/gcc
+ configure:2787: result: gcc
+ configure:3019: checking for C compiler version
+ configure:3027: gcc --version >&5
+-gcc (GCC) 4.6.1
+-Copyright (C) 2011 Free Software Foundation, Inc.
++gcc (Ubuntu 4.3.3-5ubuntu4) 4.3.3
++Copyright (C) 2008 Free Software Foundation, Inc.
+ This is free software; see the source for copying conditions.  There is NO
+ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ 
+ configure:3031: $? = 0
+ configure:3038: gcc -v >&5
+ Using built-in specs.
+-COLLECT_GCC=gcc
+-COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-unknown-linux-gnu/4.6.1/lto-wrapper
+-Target: x86_64-unknown-linux-gnu
+-Configured with: /build/src/gcc-4.6.1/configure --prefix=/usr --libdir=/usr/lib --libexecdir=/usr/lib --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.archlinux.org/ --enable-languages=c,c++,ada,fortran,go,lto,objc,obj-c++ --enable-shared --enable-threads=posix --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-clocale=gnu --enable-gnu-unique-object --enable-linker-build-id --with-ppl --enable-cloog-backend=isl --enable-lto --enable-gold --enable-ld=default --enable-plugin --with-plugin-ld=ld.gold --disable-multilib --disable-libstdcxx-pch --enable-checking=release
++Target: x86_64-linux-gnu
++Configured with: ../src/configure -v --with-pkgversion='Ubuntu 4.3.3-5ubuntu4' --with-bugurl=file:///usr/share/doc/gcc-4.3/README.Bugs --enable-languages=c,c++,fortran,objc,obj-c++ --prefix=/usr --enable-shared --with-system-zlib --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --enable-nls --with-gxx-include-dir=/usr/include/c++/4.3 --program-suffix=-4.3 --enable-clocale=gnu --enable-libstdcxx-debug --enable-objc-gc --enable-mpfr --with-tune=generic --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
+ Thread model: posix
+-gcc version 4.6.1 (GCC) 
++gcc version 4.3.3 (Ubuntu 4.3.3-5ubuntu4) 
+ configure:3042: $? = 0
+ configure:3049: gcc -V >&5
+-gcc: error: unrecognized option '-V'
+-gcc: fatal error: no input files
+-compilation terminated.
++gcc: '-V' option must have argument
+ configure:3053: $? = 1
+ configure:3076: checking for C compiler default output file name
+ configure:3098: gcc    conftest.c  >&5
+@@ -140,8 +138,7 @@
+ configure:4558: gcc -E  conftest.c
+ configure:4565: $? = 0
+ configure:4596: gcc -E  conftest.c
+-conftest.c:10:28: fatal error: ac_nonexistent.h: No such file or directory
+-compilation terminated.
++conftest.c:10:28: error: ac_nonexistent.h: No such file or directory
+ configure:4603: $? = 1
+ configure: failed program was:
+ | /* confdefs.h.  */
+@@ -158,8 +155,7 @@
+ configure:4665: gcc -E  conftest.c
+ configure:4672: $? = 0
+ configure:4703: gcc -E  conftest.c
+-conftest.c:10:28: fatal error: ac_nonexistent.h: No such file or directory
+-compilation terminated.
++conftest.c:10:28: error: ac_nonexistent.h: No such file or directory
+ configure:4710: $? = 1
+ configure: failed program was:
+ | /* confdefs.h.  */
+@@ -231,25 +227,21 @@
+ configure:5232: result: g++
+ configure:5259: checking for C++ compiler version
+ configure:5267: g++ --version >&5
+-g++ (GCC) 4.6.1
+-Copyright (C) 2011 Free Software Foundation, Inc.
++g++ (Ubuntu 4.3.3-5ubuntu4) 4.3.3
++Copyright (C) 2008 Free Software Foundation, Inc.
+ This is free software; see the source for copying conditions.  There is NO
+ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ 
+ configure:5271: $? = 0
+ configure:5278: g++ -v >&5
+ Using built-in specs.
+-COLLECT_GCC=g++
+-COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-unknown-linux-gnu/4.6.1/lto-wrapper
+-Target: x86_64-unknown-linux-gnu
+-Configured with: /build/src/gcc-4.6.1/configure --prefix=/usr --libdir=/usr/lib --libexecdir=/usr/lib --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.archlinux.org/ --enable-languages=c,c++,ada,fortran,go,lto,objc,obj-c++ --enable-shared --enable-threads=posix --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-clocale=gnu --enable-gnu-unique-object --enable-linker-build-id --with-ppl --enable-cloog-backend=isl --enable-lto --enable-gold --enable-ld=default --enable-plugin --with-plugin-ld=ld.gold --disable-multilib --disable-libstdcxx-pch --enable-checking=release
++Target: x86_64-linux-gnu
++Configured with: ../src/configure -v --with-pkgversion='Ubuntu 4.3.3-5ubuntu4' --with-bugurl=file:///usr/share/doc/gcc-4.3/README.Bugs --enable-languages=c,c++,fortran,objc,obj-c++ --prefix=/usr --enable-shared --with-system-zlib --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --enable-nls --with-gxx-include-dir=/usr/include/c++/4.3 --program-suffix=-4.3 --enable-clocale=gnu --enable-libstdcxx-debug --enable-objc-gc --enable-mpfr --with-tune=generic --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
+ Thread model: posix
+-gcc version 4.6.1 (GCC) 
++gcc version 4.3.3 (Ubuntu 4.3.3-5ubuntu4) 
+ configure:5282: $? = 0
+ configure:5289: g++ -V >&5
+-g++: error: unrecognized option '-V'
+-g++: fatal error: no input files
+-compilation terminated.
++g++: '-V' option must have argument
+ configure:5293: $? = 1
+ configure:5296: checking whether we are using the GNU C++ compiler
+ configure:5325: g++ -c   conftest.cpp >&5
+@@ -265,8 +257,7 @@
+ configure:5664: g++ -E  conftest.cpp
+ configure:5671: $? = 0
+ configure:5702: g++ -E  conftest.cpp
+-conftest.cpp:21:28: fatal error: ac_nonexistent.h: No such file or directory
+-compilation terminated.
++conftest.cpp:21:28: error: ac_nonexistent.h: No such file or directory
+ configure:5709: $? = 1
+ configure: failed program was:
+ | /* confdefs.h.  */
+@@ -294,8 +285,7 @@
+ configure:5771: g++ -E  conftest.cpp
+ configure:5778: $? = 0
+ configure:5809: g++ -E  conftest.cpp
+-conftest.cpp:21:28: fatal error: ac_nonexistent.h: No such file or directory
+-compilation terminated.
++conftest.cpp:21:28: error: ac_nonexistent.h: No such file or directory
+ configure:5816: $? = 1
+ configure: failed program was:
+ | /* confdefs.h.  */
+@@ -425,7 +415,7 @@
+ configure:7012: result: yes
+ configure:7030: checking if gcc supports -fno-rtti -fno-exceptions
+ configure:7048: gcc -c -g -O2  -fno-rtti -fno-exceptions conftest.c >&5
+-cc1: warning: command line option '-fno-rtti' is valid for C++/ObjC++ but not for C [enabled by default]
++cc1: warning: command line option "-fno-rtti" is valid for C++/ObjC++ but not for C
+ configure:7052: $? = 0
+ configure:7063: result: no
+ configure:7078: checking for gcc option to produce PIC
+@@ -491,25 +481,21 @@
+ configure:12641: result: yes
+ configure:20028: checking for C++ compiler version
+ configure:20036: g++ --version >&5
+-g++ (GCC) 4.6.1
+-Copyright (C) 2011 Free Software Foundation, Inc.
++g++ (Ubuntu 4.3.3-5ubuntu4) 4.3.3
++Copyright (C) 2008 Free Software Foundation, Inc.
+ This is free software; see the source for copying conditions.  There is NO
+ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ 
+ configure:20040: $? = 0
+ configure:20047: g++ -v >&5
+ Using built-in specs.
+-COLLECT_GCC=g++
+-COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-unknown-linux-gnu/4.6.1/lto-wrapper
+-Target: x86_64-unknown-linux-gnu
+-Configured with: /build/src/gcc-4.6.1/configure --prefix=/usr --libdir=/usr/lib --libexecdir=/usr/lib --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.archlinux.org/ --enable-languages=c,c++,ada,fortran,go,lto,objc,obj-c++ --enable-shared --enable-threads=posix --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-clocale=gnu --enable-gnu-unique-object --enable-linker-build-id --with-ppl --enable-cloog-backend=isl --enable-lto --enable-gold --enable-ld=default --enable-plugin --with-plugin-ld=ld.gold --disable-multilib --disable-libstdcxx-pch --enable-checking=release
++Target: x86_64-linux-gnu
++Configured with: ../src/configure -v --with-pkgversion='Ubuntu 4.3.3-5ubuntu4' --with-bugurl=file:///usr/share/doc/gcc-4.3/README.Bugs --enable-languages=c,c++,fortran,objc,obj-c++ --prefix=/usr --enable-shared --with-system-zlib --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --enable-nls --with-gxx-include-dir=/usr/include/c++/4.3 --program-suffix=-4.3 --enable-clocale=gnu --enable-libstdcxx-debug --enable-objc-gc --enable-mpfr --with-tune=generic --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
+ Thread model: posix
+-gcc version 4.6.1 (GCC) 
++gcc version 4.3.3 (Ubuntu 4.3.3-5ubuntu4) 
+ configure:20051: $? = 0
+ configure:20058: g++ -V >&5
+-g++: error: unrecognized option '-V'
+-g++: fatal error: no input files
+-compilation terminated.
++g++: '-V' option must have argument
+ configure:20062: $? = 1
+ configure:20065: checking whether we are using the GNU C++ compiler
+ configure:20118: result: yes
+@@ -521,25 +507,21 @@
+ configure:20467: result: gcc
+ configure:20699: checking for C compiler version
+ configure:20707: gcc --version >&5
+-gcc (GCC) 4.6.1
+-Copyright (C) 2011 Free Software Foundation, Inc.
++gcc (Ubuntu 4.3.3-5ubuntu4) 4.3.3
++Copyright (C) 2008 Free Software Foundation, Inc.
+ This is free software; see the source for copying conditions.  There is NO
+ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ 
+ configure:20711: $? = 0
+ configure:20718: gcc -v >&5
+ Using built-in specs.
+-COLLECT_GCC=gcc
+-COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-unknown-linux-gnu/4.6.1/lto-wrapper
+-Target: x86_64-unknown-linux-gnu
+-Configured with: /build/src/gcc-4.6.1/configure --prefix=/usr --libdir=/usr/lib --libexecdir=/usr/lib --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.archlinux.org/ --enable-languages=c,c++,ada,fortran,go,lto,objc,obj-c++ --enable-shared --enable-threads=posix --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-clocale=gnu --enable-gnu-unique-object --enable-linker-build-id --with-ppl --enable-cloog-backend=isl --enable-lto --enable-gold --enable-ld=default --enable-plugin --with-plugin-ld=ld.gold --disable-multilib --disable-libstdcxx-pch --enable-checking=release
++Target: x86_64-linux-gnu
++Configured with: ../src/configure -v --with-pkgversion='Ubuntu 4.3.3-5ubuntu4' --with-bugurl=file:///usr/share/doc/gcc-4.3/README.Bugs --enable-languages=c,c++,fortran,objc,obj-c++ --prefix=/usr --enable-shared --with-system-zlib --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --enable-nls --with-gxx-include-dir=/usr/include/c++/4.3 --program-suffix=-4.3 --enable-clocale=gnu --enable-libstdcxx-debug --enable-objc-gc --enable-mpfr --with-tune=generic --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
+ Thread model: posix
+-gcc version 4.6.1 (GCC) 
++gcc version 4.3.3 (Ubuntu 4.3.3-5ubuntu4) 
+ configure:20722: $? = 0
+ configure:20729: gcc -V >&5
+-gcc: error: unrecognized option '-V'
+-gcc: fatal error: no input files
+-compilation terminated.
++gcc: '-V' option must have argument
+ configure:20733: $? = 1
+ configure:20736: checking whether we are using the GNU C compiler
+ configure:20789: result: yes
+@@ -554,8 +536,7 @@
+ configure:21331: gcc -E  conftest.c
+ configure:21338: $? = 0
+ configure:21369: gcc -E  conftest.c
+-conftest.c:21:28: fatal error: ac_nonexistent.h: No such file or directory
+-compilation terminated.
++conftest.c:21:28: error: ac_nonexistent.h: No such file or directory
+ configure:21376: $? = 1
+ configure: failed program was:
+ | /* confdefs.h.  */
+@@ -580,13 +561,14 @@
+ | /* end confdefs.h.  */
+ | #include <ac_nonexistent.h>
+ configure:21429: checking for a BSD-compatible install
+-configure:21497: result: /bin/install -c
++configure:21497: result: /usr/bin/install -c
+ configure:21508: checking whether ln -s works
+ configure:21512: result: yes
+-configure:21519: checking whether make sets $(MAKE)
++configure:21519: checking whether make -j4 sets $(MAKE)
+ configure:21541: result: yes
+ configure:21554: checking for rpmbuild
+-configure:21584: result: no
++configure:21570: found /usr/bin/rpmbuild
++configure:21581: result: rpmbuild
+ configure:21624: checking for ANSI C header files
+ configure:21792: result: yes
+ configure:21808: checking for stdint.h
+@@ -595,8 +577,7 @@
+ configure:21815: result: yes
+ configure:21965: checking mathf.h usability
+ configure:21982: gcc -c -g -O2  conftest.c >&5
+-conftest.c:57:19: fatal error: mathf.h: No such file or directory
+-compilation terminated.
++conftest.c:57:19: error: mathf.h: No such file or directory
+ configure:21989: $? = 1
+ configure: failed program was:
+ | /* confdefs.h.  */
+@@ -659,8 +640,7 @@
+ configure:22003: result: no
+ configure:22007: checking mathf.h presence
+ configure:22022: gcc -E  conftest.c
+-conftest.c:24:19: fatal error: mathf.h: No such file or directory
+-compilation terminated.
++conftest.c:24:19: error: mathf.h: No such file or directory
+ configure:22029: $? = 1
+ configure: failed program was:
+ | /* confdefs.h.  */
+@@ -702,12 +682,12 @@
+ configure:22226: result: yes
+ configure:22246: checking for strchr
+ configure:22302: gcc -o conftest -g -O2   conftest.c  >&5
+-conftest.c:48:6: warning: conflicting types for built-in function 'strchr' [enabled by default]
++conftest.c:48: warning: conflicting types for built-in function 'strchr'
+ configure:22309: $? = 0
+ configure:22331: result: yes
+ configure:22246: checking for memcpy
+ configure:22302: gcc -o conftest -g -O2   conftest.c  >&5
+-conftest.c:49:6: warning: conflicting types for built-in function 'memcpy' [enabled by default]
++conftest.c:49: warning: conflicting types for built-in function 'memcpy'
+ configure:22309: $? = 0
+ configure:22331: result: yes
+ configure:22359: checking sys/time.h usability
+@@ -730,9 +710,7 @@
+ configure:22603: result: inline
+ configure:22623: checking whether byte ordering is bigendian
+ configure:22648: gcc -c -g -O2  conftest.c >&5
+-conftest.c:30:9: error: unknown type name 'not'
+-conftest.c:30:15: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'universal'
+-conftest.c:30:15: error: unknown type name 'universal'
++conftest.c:30: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'a'
+ configure:22655: $? = 1
+ configure: failed program was:
+ | /* confdefs.h.  */
+@@ -769,13 +747,467 @@
+ | 	     typedef int dummy;
+ | 
+ configure:22705: gcc -c -g -O2  conftest.c >&5
++configure:22712: $? = 0
++configure:22744: gcc -c -g -O2  conftest.c >&5
++conftest.c: In function 'main':
++conftest.c:36: error: 'not' undeclared (first use in this function)
++conftest.c:36: error: (Each undeclared identifier is reported only once
++conftest.c:36: error: for each function it appears in.)
++conftest.c:36: error: expected ';' before 'big'
++configure:22751: $? = 1
++configure: failed program was:
++| /* confdefs.h.  */
++| #define PACKAGE_NAME ""
++| #define PACKAGE_TARNAME ""
++| #define PACKAGE_VERSION ""
++| #define PACKAGE_STRING ""
++| #define PACKAGE_BUGREPORT ""
++| #define PACKAGE "faad2"
++| #define VERSION "2.0"
++| #define STDC_HEADERS 1
++| #define HAVE_SYS_TYPES_H 1
++| #define HAVE_SYS_STAT_H 1
++| #define HAVE_STDLIB_H 1
++| #define HAVE_STRING_H 1
++| #define HAVE_MEMORY_H 1
++| #define HAVE_STRINGS_H 1
++| #define HAVE_INTTYPES_H 1
++| #define HAVE_STDINT_H 1
++| #define HAVE_UNISTD_H 1
++| #define HAVE_DLFCN_H 1
++| #define STDC_HEADERS 1
++| #define HAVE_STDINT_H 1
++| #define HAVE_INTTYPES_H 1
++| #define HAVE_FLOAT_H 1
++| #define HAVE_STRCHR 1
++| #define HAVE_MEMCPY 1
++| #define HAVE_SYS_TIME_H 1
++| #define TIME_WITH_SYS_TIME 1
++| /* end confdefs.h.  */
++| #include <sys/types.h>
++| 		#include <sys/param.h>
++| 
++| int
++| main ()
++| {
++| #if BYTE_ORDER != BIG_ENDIAN
++| 		 not big endian
++| 		#endif
++| 
++|   ;
++|   return 0;
++| }
++configure:23003: result: no
++configure:23029: checking for off_t
++configure:23057: gcc -c -g -O2  conftest.c >&5
++configure:23064: $? = 0
++configure:23091: gcc -c -g -O2  conftest.c >&5
++conftest.c: In function 'main':
++conftest.c:65: error: expected expression before ')' token
++configure:23098: $? = 1
++configure: failed program was:
++| /* confdefs.h.  */
++| #define PACKAGE_NAME ""
++| #define PACKAGE_TARNAME ""
++| #define PACKAGE_VERSION ""
++| #define PACKAGE_STRING ""
++| #define PACKAGE_BUGREPORT ""
++| #define PACKAGE "faad2"
++| #define VERSION "2.0"
++| #define STDC_HEADERS 1
++| #define HAVE_SYS_TYPES_H 1
++| #define HAVE_SYS_STAT_H 1
++| #define HAVE_STDLIB_H 1
++| #define HAVE_STRING_H 1
++| #define HAVE_MEMORY_H 1
++| #define HAVE_STRINGS_H 1
++| #define HAVE_INTTYPES_H 1
++| #define HAVE_STDINT_H 1
++| #define HAVE_UNISTD_H 1
++| #define HAVE_DLFCN_H 1
++| #define STDC_HEADERS 1
++| #define HAVE_STDINT_H 1
++| #define HAVE_INTTYPES_H 1
++| #define HAVE_FLOAT_H 1
++| #define HAVE_STRCHR 1
++| #define HAVE_MEMCPY 1
++| #define HAVE_SYS_TIME_H 1
++| #define TIME_WITH_SYS_TIME 1
++| /* end confdefs.h.  */
++| #include <stdio.h>
++| #ifdef HAVE_SYS_TYPES_H
++| # include <sys/types.h>
++| #endif
++| #ifdef HAVE_SYS_STAT_H
++| # include <sys/stat.h>
++| #endif
++| #ifdef STDC_HEADERS
++| # include <stdlib.h>
++| # include <stddef.h>
++| #else
++| # ifdef HAVE_STDLIB_H
++| #  include <stdlib.h>
++| # endif
++| #endif
++| #ifdef HAVE_STRING_H
++| # if !defined STDC_HEADERS && defined HAVE_MEMORY_H
++| #  include <memory.h>
++| # endif
++| # include <string.h>
++| #endif
++| #ifdef HAVE_STRINGS_H
++| # include <strings.h>
++| #endif
++| #ifdef HAVE_INTTYPES_H
++| # include <inttypes.h>
++| #endif
++| #ifdef HAVE_STDINT_H
++| # include <stdint.h>
++| #endif
++| #ifdef HAVE_UNISTD_H
++| # include <unistd.h>
++| #endif
++| int
++| main ()
++| {
++| if (sizeof ((off_t)))
++| 	  return 0;
++|   ;
++|   return 0;
++| }
++configure:23121: result: yes
++configure:23138: checking for float32_t temp
++configure:23162: gcc -c -g -O2  conftest.c >&5
++conftest.c:29:23: warning: extra tokens at end of #include directive
++conftest.c:30:31: error: sys/float.h: No such file or directory
++conftest.c: In function 'main':
++conftest.c:34: error: 'float32_t' undeclared (first use in this function)
++conftest.c:34: error: (Each undeclared identifier is reported only once
++conftest.c:34: error: for each function it appears in.)
++conftest.c:34: error: expected ';' before 'temp'
++configure:23169: $? = 1
++configure: failed program was:
++| /* confdefs.h.  */
++| #define PACKAGE_NAME ""
++| #define PACKAGE_TARNAME ""
++| #define PACKAGE_VERSION ""
++| #define PACKAGE_STRING ""
++| #define PACKAGE_BUGREPORT ""
++| #define PACKAGE "faad2"
++| #define VERSION "2.0"
++| #define STDC_HEADERS 1
++| #define HAVE_SYS_TYPES_H 1
++| #define HAVE_SYS_STAT_H 1
++| #define HAVE_STDLIB_H 1
++| #define HAVE_STRING_H 1
++| #define HAVE_MEMORY_H 1
++| #define HAVE_STRINGS_H 1
++| #define HAVE_INTTYPES_H 1
++| #define HAVE_STDINT_H 1
++| #define HAVE_UNISTD_H 1
++| #define HAVE_DLFCN_H 1
++| #define STDC_HEADERS 1
++| #define HAVE_STDINT_H 1
++| #define HAVE_INTTYPES_H 1
++| #define HAVE_FLOAT_H 1
++| #define HAVE_STRCHR 1
++| #define HAVE_MEMCPY 1
++| #define HAVE_SYS_TIME_H 1
++| #define TIME_WITH_SYS_TIME 1
++| /* end confdefs.h.  */
++| #include <sys/types.h>,
++|         #include <sys/float.h>
++| int
++| main ()
++| {
++| float32_t temp;
++|   ;
++|   return 0;
++| }
++configure:23192: result: no
++configure:23201: checking for strsep
++configure:23257: gcc -o conftest -g -O2   conftest.c  >&5
++configure:23264: $? = 0
++configure:23286: result: yes
++configure:23300: checking for in_port_t temp
++configure:23324: gcc -c -g -O2  conftest.c >&5
++configure:23331: $? = 0
++configure:23351: result: yes
++configure:23359: checking for socklen_t temp
++configure:23383: gcc -c -g -O2  conftest.c >&5
++configure:23390: $? = 0
++configure:23410: result: yes
++configure:23418: checking for fpos_t foo; foo.__pos = 0;
++configure:23441: gcc -c -g -O2  conftest.c >&5
++configure:23448: $? = 0
++configure:23468: result: yes
++configure:23479: checking for MP4Create in -lmp4v2
++configure:23514: gcc -o conftest -g -O2   conftest.c -lmp4v2 -lstdc++  >&5
++/usr/bin/ld: cannot find -lmp4v2
++collect2: ld returned 1 exit status
++configure:23521: $? = 1
++configure: failed program was:
++| /* confdefs.h.  */
++| #define PACKAGE_NAME ""
++| #define PACKAGE_TARNAME ""
++| #define PACKAGE_VERSION ""
++| #define PACKAGE_STRING ""
++| #define PACKAGE_BUGREPORT ""
++| #define PACKAGE "faad2"
++| #define VERSION "2.0"
++| #define STDC_HEADERS 1
++| #define HAVE_SYS_TYPES_H 1
++| #define HAVE_SYS_STAT_H 1
++| #define HAVE_STDLIB_H 1
++| #define HAVE_STRING_H 1
++| #define HAVE_MEMORY_H 1
++| #define HAVE_STRINGS_H 1
++| #define HAVE_INTTYPES_H 1
++| #define HAVE_STDINT_H 1
++| #define HAVE_UNISTD_H 1
++| #define HAVE_DLFCN_H 1
++| #define STDC_HEADERS 1
++| #define HAVE_STDINT_H 1
++| #define HAVE_INTTYPES_H 1
++| #define HAVE_FLOAT_H 1
++| #define HAVE_STRCHR 1
++| #define HAVE_MEMCPY 1
++| #define HAVE_SYS_TIME_H 1
++| #define TIME_WITH_SYS_TIME 1
++| #define HAVE_STRSEP 1
++| #define HAVE_IN_PORT_T 1
++| #define HAVE_SOCKLEN_T 1
++| #define HAVE_FPOS_T_POS 1
++| /* end confdefs.h.  */
++| 
++| /* Override any GCC internal prototype to avoid an error.
++|    Use char because int might match the return type of a GCC
++|    builtin and then its argument prototype would still apply.  */
++| #ifdef __cplusplus
++| extern "C"
++| #endif
++| char MP4Create ();
++| int
++| main ()
++| {
++| return MP4Create ();
++|   ;
++|   return 0;
++| }
++configure:23542: result: no
++configure:23556: checking for MP4MetadataDelete in -lmp4v2
++configure:23591: gcc -o conftest -g -O2   conftest.c -lmp4v2 -lstdc++  >&5
++/usr/bin/ld: cannot find -lmp4v2
++collect2: ld returned 1 exit status
++configure:23598: $? = 1
++configure: failed program was:
++| /* confdefs.h.  */
++| #define PACKAGE_NAME ""
++| #define PACKAGE_TARNAME ""
++| #define PACKAGE_VERSION ""
++| #define PACKAGE_STRING ""
++| #define PACKAGE_BUGREPORT ""
++| #define PACKAGE "faad2"
++| #define VERSION "2.0"
++| #define STDC_HEADERS 1
++| #define HAVE_SYS_TYPES_H 1
++| #define HAVE_SYS_STAT_H 1
++| #define HAVE_STDLIB_H 1
++| #define HAVE_STRING_H 1
++| #define HAVE_MEMORY_H 1
++| #define HAVE_STRINGS_H 1
++| #define HAVE_INTTYPES_H 1
++| #define HAVE_STDINT_H 1
++| #define HAVE_UNISTD_H 1
++| #define HAVE_DLFCN_H 1
++| #define STDC_HEADERS 1
++| #define HAVE_STDINT_H 1
++| #define HAVE_INTTYPES_H 1
++| #define HAVE_FLOAT_H 1
++| #define HAVE_STRCHR 1
++| #define HAVE_MEMCPY 1
++| #define HAVE_SYS_TIME_H 1
++| #define TIME_WITH_SYS_TIME 1
++| #define HAVE_STRSEP 1
++| #define HAVE_IN_PORT_T 1
++| #define HAVE_SOCKLEN_T 1
++| #define HAVE_FPOS_T_POS 1
++| /* end confdefs.h.  */
++| 
++| /* Override any GCC internal prototype to avoid an error.
++|    Use char because int might match the return type of a GCC
++|    builtin and then its argument prototype would still apply.  */
++| #ifdef __cplusplus
++| extern "C"
++| #endif
++| char MP4MetadataDelete ();
++| int
++| main ()
++| {
++| return MP4MetadataDelete ();
++|   ;
++|   return 0;
++| }
++configure:23619: result: no
++configure:23642: checking mp4.h usability
++configure:23659: gcc -c -g -O2  conftest.c >&5
++conftest.c:66:17: error: mp4.h: No such file or directory
++configure:23666: $? = 1
++configure: failed program was:
++| /* confdefs.h.  */
++| #define PACKAGE_NAME ""
++| #define PACKAGE_TARNAME ""
++| #define PACKAGE_VERSION ""
++| #define PACKAGE_STRING ""
++| #define PACKAGE_BUGREPORT ""
++| #define PACKAGE "faad2"
++| #define VERSION "2.0"
++| #define STDC_HEADERS 1
++| #define HAVE_SYS_TYPES_H 1
++| #define HAVE_SYS_STAT_H 1
++| #define HAVE_STDLIB_H 1
++| #define HAVE_STRING_H 1
++| #define HAVE_MEMORY_H 1
++| #define HAVE_STRINGS_H 1
++| #define HAVE_INTTYPES_H 1
++| #define HAVE_STDINT_H 1
++| #define HAVE_UNISTD_H 1
++| #define HAVE_DLFCN_H 1
++| #define STDC_HEADERS 1
++| #define HAVE_STDINT_H 1
++| #define HAVE_INTTYPES_H 1
++| #define HAVE_FLOAT_H 1
++| #define HAVE_STRCHR 1
++| #define HAVE_MEMCPY 1
++| #define HAVE_SYS_TIME_H 1
++| #define TIME_WITH_SYS_TIME 1
++| #define HAVE_STRSEP 1
++| #define HAVE_IN_PORT_T 1
++| #define HAVE_SOCKLEN_T 1
++| #define HAVE_FPOS_T_POS 1
++| /* end confdefs.h.  */
++| #include <stdio.h>
++| #ifdef HAVE_SYS_TYPES_H
++| # include <sys/types.h>
++| #endif
++| #ifdef HAVE_SYS_STAT_H
++| # include <sys/stat.h>
++| #endif
++| #ifdef STDC_HEADERS
++| # include <stdlib.h>
++| # include <stddef.h>
++| #else
++| # ifdef HAVE_STDLIB_H
++| #  include <stdlib.h>
++| # endif
++| #endif
++| #ifdef HAVE_STRING_H
++| # if !defined STDC_HEADERS && defined HAVE_MEMORY_H
++| #  include <memory.h>
++| # endif
++| # include <string.h>
++| #endif
++| #ifdef HAVE_STRINGS_H
++| # include <strings.h>
++| #endif
++| #ifdef HAVE_INTTYPES_H
++| # include <inttypes.h>
++| #endif
++| #ifdef HAVE_STDINT_H
++| # include <stdint.h>
++| #endif
++| #ifdef HAVE_UNISTD_H
++| # include <unistd.h>
++| #endif
++| #include <mp4.h>
++configure:23680: result: no
++configure:23684: checking mp4.h presence
++configure:23699: gcc -E  conftest.c
++conftest.c:33:17: error: mp4.h: No such file or directory
++configure:23706: $? = 1
++configure: failed program was:
++| /* confdefs.h.  */
++| #define PACKAGE_NAME ""
++| #define PACKAGE_TARNAME ""
++| #define PACKAGE_VERSION ""
++| #define PACKAGE_STRING ""
++| #define PACKAGE_BUGREPORT ""
++| #define PACKAGE "faad2"
++| #define VERSION "2.0"
++| #define STDC_HEADERS 1
++| #define HAVE_SYS_TYPES_H 1
++| #define HAVE_SYS_STAT_H 1
++| #define HAVE_STDLIB_H 1
++| #define HAVE_STRING_H 1
++| #define HAVE_MEMORY_H 1
++| #define HAVE_STRINGS_H 1
++| #define HAVE_INTTYPES_H 1
++| #define HAVE_STDINT_H 1
++| #define HAVE_UNISTD_H 1
++| #define HAVE_DLFCN_H 1
++| #define STDC_HEADERS 1
++| #define HAVE_STDINT_H 1
++| #define HAVE_INTTYPES_H 1
++| #define HAVE_FLOAT_H 1
++| #define HAVE_STRCHR 1
++| #define HAVE_MEMCPY 1
++| #define HAVE_SYS_TIME_H 1
++| #define TIME_WITH_SYS_TIME 1
++| #define HAVE_STRSEP 1
++| #define HAVE_IN_PORT_T 1
++| #define HAVE_SOCKLEN_T 1
++| #define HAVE_FPOS_T_POS 1
++| /* end confdefs.h.  */
++| #include <mp4.h>
++configure:23720: result: no
++configure:23748: checking for mp4.h
++configure:23755: result: no
++configure:23794: *** Building with internal mp4v2 ***
++configure:24215: no xmms build configured
++configure:24435: creating ./config.status
++
++## ---------------------- ##
++## Running config.status. ##
++## ---------------------- ##
++
++This file was extended by config.status, which was
++generated by GNU Autoconf 2.63.  Invocation command line was
++
++  CONFIG_FILES    = 
++  CONFIG_HEADERS  = 
++  CONFIG_LINKS    = 
++  CONFIG_COMMANDS = 
++  $ ./config.status 
++
++on amazon
++
++config.status:821: creating libfaad/Makefile
++config.status:968: WARNING:  'libfaad/Makefile.in' seems to ignore the --datarootdir setting
++config.status:821: creating frontend/Makefile
++config.status:968: WARNING:  'frontend/Makefile.in' seems to ignore the --datarootdir setting
++config.status:821: creating common/Makefile
++config.status:968: WARNING:  'common/Makefile.in' seems to ignore the --datarootdir setting
++config.status:821: creating plugins/Makefile
++config.status:968: WARNING:  'plugins/Makefile.in' seems to ignore the --datarootdir setting
++config.status:821: creating Makefile
++config.status:968: WARNING:  'Makefile.in' seems to ignore the --datarootdir setting
++config.status:821: creating plugins/mpeg4ip/Makefile
++config.status:968: WARNING:  'plugins/mpeg4ip/Makefile.in' seems to ignore the --datarootdir setting
++config.status:821: creating common/mp4ff/Makefile
++config.status:968: WARNING:  'common/mp4ff/Makefile.in' seems to ignore the --datarootdir setting
++config.status:821: creating common/mp4v2/Makefile
++config.status:968: WARNING:  'common/mp4v2/Makefile.in' seems to ignore the --datarootdir setting
++config.status:821: creating faad2.spec
++config.status:821: creating config.h
++config.status:1037: config.h is unchanged
++config.status:1088: executing depfiles commands
+ 
+ ## ---------------- ##
+ ## Cache variables. ##
+ ## ---------------- ##
+ 
+ ac_cv_build=x86_64-unknown-linux-gnu
+-ac_cv_c_bigendian=unknown
++ac_cv_c_bigendian=no
+ ac_cv_c_compiler_gnu=yes
+ ac_cv_c_inline=inline
+ ac_cv_cxx_compiler_gnu=yes
+@@ -812,11 +1244,13 @@
+ ac_cv_f77_compiler_gnu=no
+ ac_cv_func_memcpy=yes
+ ac_cv_func_strchr=yes
++ac_cv_func_strsep=yes
+ ac_cv_header_dlfcn_h=yes
+ ac_cv_header_float_h=yes
+ ac_cv_header_inttypes_h=yes
+ ac_cv_header_mathf_h=no
+ ac_cv_header_memory_h=yes
++ac_cv_header_mp4_h=no
+ ac_cv_header_stdc=yes
+ ac_cv_header_stdint_h=yes
+ ac_cv_header_stdlib_h=yes
+@@ -828,13 +1262,16 @@
+ ac_cv_header_time=yes
+ ac_cv_header_unistd_h=yes
+ ac_cv_host=x86_64-unknown-linux-gnu
++ac_cv_lib_mp4v2_MP4Create=no
++ac_cv_lib_mp4v2_MP4MetadataDelete=no
+ ac_cv_objext=o
+ ac_cv_path_EGREP='/bin/grep -E'
+ ac_cv_path_GREP=/bin/grep
+-ac_cv_path_install='/bin/install -c'
++ac_cv_path_install='/usr/bin/install -c'
+ ac_cv_prog_AWK=gawk
+ ac_cv_prog_CPP='gcc -E'
+ ac_cv_prog_CXXCPP='g++ -E'
++ac_cv_prog_RPMBUILD=rpmbuild
+ ac_cv_prog_ac_ct_AR=ar
+ ac_cv_prog_ac_ct_CC=gcc
+ ac_cv_prog_ac_ct_CXX=g++
+@@ -845,11 +1282,12 @@
+ ac_cv_prog_cxx_g=yes
+ ac_cv_prog_f77_g=no
+ ac_cv_prog_make_make_set=yes
++ac_cv_type_off_t=yes
+ am_cv_CC_dependencies_compiler_type=gcc3
+ am_cv_CXX_dependencies_compiler_type=gcc3
+ lt_cv_deplibs_check_method=pass_all
+ lt_cv_file_magic_cmd='$MAGIC_CMD'
+-lt_cv_file_magic_test_file='/lib/libc.so.6 /lib/libc-2.14.so'
++lt_cv_file_magic_test_file='/lib/libc.so.6 /lib/libc-2.9.so'
+ lt_cv_ld_reload_flag=-r
+ lt_cv_objdir=.libs
+ lt_cv_path_LD=/usr/bin/ld
+@@ -875,15 +1313,15 @@
+ ## Output variables. ##
+ ## ----------------- ##
+ 
+-ACLOCAL='${SHELL} /home/garrett/junk/build/cinelerra-heroine/src/cinelerra-4.2-src/quicktime/thirdparty/faad2-2.0/missing --run aclocal-1.8'
++ACLOCAL='${SHELL} /root/hvirtual/quicktime/thirdparty/faad2-2.0/missing --run aclocal-1.8'
+ AMDEPBACKSLASH='\'
+ AMDEP_FALSE='#'
+ AMDEP_TRUE=''
+-AMTAR='${SHELL} /home/garrett/junk/build/cinelerra-heroine/src/cinelerra-4.2-src/quicktime/thirdparty/faad2-2.0/missing --run tar'
++AMTAR='${SHELL} /root/hvirtual/quicktime/thirdparty/faad2-2.0/missing --run tar'
+ AR='ar'
+-AUTOCONF='${SHELL} /home/garrett/junk/build/cinelerra-heroine/src/cinelerra-4.2-src/quicktime/thirdparty/faad2-2.0/missing --run autoconf'
+-AUTOHEADER='${SHELL} /home/garrett/junk/build/cinelerra-heroine/src/cinelerra-4.2-src/quicktime/thirdparty/faad2-2.0/missing --run autoheader'
+-AUTOMAKE='${SHELL} /home/garrett/junk/build/cinelerra-heroine/src/cinelerra-4.2-src/quicktime/thirdparty/faad2-2.0/missing --run automake-1.8'
++AUTOCONF='${SHELL} /root/hvirtual/quicktime/thirdparty/faad2-2.0/missing --run autoconf'
++AUTOHEADER='${SHELL} /root/hvirtual/quicktime/thirdparty/faad2-2.0/missing --run autoheader'
++AUTOMAKE='${SHELL} /root/hvirtual/quicktime/thirdparty/faad2-2.0/missing --run automake-1.8'
+ AWK='gawk'
+ CC='gcc'
+ CCDEPMODE='depmode=gcc3'
+@@ -895,7 +1333,7 @@
+ CXXDEPMODE='depmode=gcc3'
+ CXXFLAGS='-g -O2'
+ CYGPATH_W='echo'
+-DEFS=''
++DEFS='-DHAVE_CONFIG_H'
+ DEPDIR='.deps'
+ ECHO='echo'
+ ECHO_C=''
+@@ -908,9 +1346,9 @@
+ GREP='/bin/grep'
+ GTK_CONFIG=''
+ HAVE_MPEG4IP_FALSE=''
+-HAVE_MPEG4IP_TRUE=''
++HAVE_MPEG4IP_TRUE='#'
+ HAVE_XMMS_FALSE=''
+-HAVE_XMMS_TRUE=''
++HAVE_XMMS_TRUE='#'
+ INSTALL_DATA='${INSTALL} -m 644'
+ INSTALL_PROGRAM='${INSTALL}'
+ INSTALL_SCRIPT='${INSTALL}'
+@@ -922,7 +1360,7 @@
+ LIBTOOL_DEPS='./ltmain.sh'
+ LN_S='ln -s'
+ LTLIBOBJS=''
+-MAKEINFO='${SHELL} /home/garrett/junk/build/cinelerra-heroine/src/cinelerra-4.2-src/quicktime/thirdparty/faad2-2.0/missing --run makeinfo'
++MAKEINFO='${SHELL} /root/hvirtual/quicktime/thirdparty/faad2-2.0/missing --run makeinfo'
+ MPEG4IP_PLAYER_PLUGIN_DIR=''
+ OBJEXT='o'
+ PACKAGE='faad2'
+@@ -933,13 +1371,13 @@
+ PACKAGE_VERSION=''
+ PATH_SEPARATOR=':'
+ RANLIB='ranlib'
+-RPMBUILD='rpm'
++RPMBUILD='rpmbuild'
+ SET_MAKE=''
+ SHELL='/bin/sh'
+ STRIP='strip'
+ VERSION='2.0'
+ WITH_MP4V2_FALSE=''
+-WITH_MP4V2_TRUE=''
++WITH_MP4V2_TRUE='#'
+ XMMS_CONFIG=''
+ ac_ct_CC='gcc'
+ ac_ct_CXX='g++'
+@@ -961,7 +1399,7 @@
+ datarootdir='${prefix}/share'
+ docdir='${datarootdir}/doc/${PACKAGE}'
+ dvidir='${docdir}'
+-exec_prefix='NONE'
++exec_prefix='${prefix}'
+ host='x86_64-unknown-linux-gnu'
+ host_alias=''
+ host_cpu='x86_64'
+@@ -970,7 +1408,7 @@
+ htmldir='${docdir}'
+ includedir='${prefix}/include'
+ infodir='${datarootdir}/info'
+-install_sh='/home/garrett/junk/build/cinelerra-heroine/src/cinelerra-4.2-src/quicktime/thirdparty/faad2-2.0/install-sh'
++install_sh='/root/hvirtual/quicktime/thirdparty/faad2-2.0/install-sh'
+ libdir='${exec_prefix}/lib'
+ libexecdir='${exec_prefix}/libexec'
+ localedir='${datarootdir}/locale'
+@@ -979,7 +1417,7 @@
+ mkdir_p='mkdir -p -- .'
+ oldincludedir='/usr/include'
+ pdfdir='${docdir}'
+-prefix='NONE'
++prefix='/usr/local'
+ program_transform_name='s,x,x,'
+ psdir='${docdir}'
+ sbindir='${exec_prefix}/sbin'
+@@ -1017,5 +1455,9 @@
+ #define HAVE_MEMCPY 1
+ #define HAVE_SYS_TIME_H 1
+ #define TIME_WITH_SYS_TIME 1
++#define HAVE_STRSEP 1
++#define HAVE_IN_PORT_T 1
++#define HAVE_SOCKLEN_T 1
++#define HAVE_FPOS_T_POS 1
+ 
+-configure: exit 1
++configure: exit 0
+diff -ru cinelerra-4.2-src/quicktime/thirdparty/faad2-2.0/libtool cinelerra-demo2//quicktime/thirdparty/faad2-2.0/libtool
+--- cinelerra-4.2-src/quicktime/thirdparty/faad2-2.0/libtool	2011-07-20 19:16:12.938259667 -0700
++++ cinelerra-demo2//quicktime/thirdparty/faad2-2.0/libtool	2010-10-11 11:39:38.000000000 -0700
+@@ -44,7 +44,7 @@
+ 
+ # ### BEGIN LIBTOOL CONFIG
+ 
+-# Libtool was configured on host garrett:
++# Libtool was configured on host amazon:
+ 
+ # Shell to use when invoking shell scripts.
+ SHELL="/bin/sh"
+@@ -319,7 +319,7 @@
+ sys_lib_search_path_spec="/lib64 /usr/lib64 /usr/local/lib64"
+ 
+ # Run-time system search path for libraries
+-sys_lib_dlsearch_path_spec="/lib64 /usr/lib64 # # /etc/ld.so.conf #  # End of file include /etc/ld.so.conf.d/*.conf "
++sys_lib_dlsearch_path_spec="/lib64 /usr/lib64 include /etc/ld.so.conf.d/*.conf  "
+ 
+ # Fix the shell variable $srcfile for the compiler.
+ fix_srcfile_path=""
+@@ -6768,7 +6768,7 @@
+ # End:
+ # ### BEGIN LIBTOOL TAG CONFIG: CXX
+ 
+-# Libtool was configured on host garrett:
++# Libtool was configured on host amazon:
+ 
+ # Shell to use when invoking shell scripts.
+ SHELL="/bin/sh"
+@@ -6941,11 +6941,11 @@
+ 
+ # Dependencies to place before the objects being linked to create a
+ # shared library.
+-predep_objects="/usr/lib/gcc/x86_64-unknown-linux-gnu/4.6.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-unknown-linux-gnu/4.6.1/crtbeginS.o"
++predep_objects="/usr/lib/gcc/x86_64-linux-gnu/4.3.3/../../../../lib/crti.o /usr/lib/gcc/x86_64-linux-gnu/4.3.3/crtbeginS.o"
+ 
+ # Dependencies to place after the objects being linked to create a
+ # shared library.
+-postdep_objects="/usr/lib/gcc/x86_64-unknown-linux-gnu/4.6.1/crtendS.o /usr/lib/gcc/x86_64-unknown-linux-gnu/4.6.1/../../../../lib/crtn.o"
++postdep_objects="/usr/lib/gcc/x86_64-linux-gnu/4.3.3/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/4.3.3/../../../../lib/crtn.o"
+ 
+ # Dependencies to place before the objects being linked to create a
+ # shared library.
+@@ -6957,7 +6957,7 @@
+ 
+ # The library search path used internally by the compiler when linking
+ # a shared library.
+-compiler_lib_search_path="-L/usr/lib/gcc/x86_64-unknown-linux-gnu/4.6.1 -L/usr/lib/gcc/x86_64-unknown-linux-gnu/4.6.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-unknown-linux-gnu/4.6.1/../../.."
++compiler_lib_search_path="-L/usr/lib/gcc/x86_64-linux-gnu/4.3.3 -L/usr/lib/gcc/x86_64-linux-gnu/4.3.3 -L/usr/lib/gcc/x86_64-linux-gnu/4.3.3/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/4.3.3/../../.."
+ 
+ # Method to check whether dependent libraries are shared objects.
+ deplibs_check_method="pass_all"
+@@ -7040,7 +7040,7 @@
+ sys_lib_search_path_spec="/lib64 /usr/lib64 /usr/local/lib64"
+ 
+ # Run-time system search path for libraries
+-sys_lib_dlsearch_path_spec="/lib64 /usr/lib64 # # /etc/ld.so.conf #  # End of file include /etc/ld.so.conf.d/*.conf "
++sys_lib_dlsearch_path_spec="/lib64 /usr/lib64 include /etc/ld.so.conf.d/*.conf  "
+ 
+ # Fix the shell variable $srcfile for the compiler.
+ fix_srcfile_path=""
+diff -ru cinelerra-4.2-src/thirdparty/mjpegtools-1.9.0rc3/configure cinelerra-demo2//thirdparty/mjpegtools-1.9.0rc3/configure
+--- cinelerra-4.2-src/thirdparty/mjpegtools-1.9.0rc3/configure	2008-07-10 01:06:37.000000000 -0700
++++ cinelerra-demo2//thirdparty/mjpegtools-1.9.0rc3/configure	2011-07-20 19:24:40.996910999 -0700
+@@ -23667,8 +23667,9 @@
+ 
+ else
+   { { echo "$as_me:$LINENO: error: videodev.h not found - please install the linux kernel headers" >&5
+-echo "$as_me: error: videodev.h not found - please install the linux kernel headers" >&2;}
+-   { (exit 1); exit 1; }; }
++echo "$as_me: error: videodev.h not found - please install the linux kernel headers (skipping)" >&2;}
++   #{ (exit 1); exit 1; };
++  }
+ fi
+ 
+ 
+Only in cinelerra-demo2//thirdparty/mjpegtools-1.9.0rc3: configure~
+Only in cinelerra-demo2//thirdparty/mjpegtools-1.9.0rc3: .configure.swp

@@ -1,0 +1,207 @@
+diff -Nru cinelerra-4.2/cinelerra/channelpicker.C cinelerra-demo//cinelerra/channelpicker.C
+--- cinelerra-4.2/cinelerra/channelpicker.C	2008-07-21 12:14:00.000000000 -0700
++++ cinelerra-demo//cinelerra/channelpicker.C	2011-07-01 14:11:11.053387445 -0700
+@@ -39,7 +39,7 @@
+ #include "recordgui.h"
+ #include "recordmonitor.h"
+ #include "theme.h"
+-#include "vdevicebuz.h"
++//#include "vdevicebuz.h"
+ #include "vdeviceprefs.h"
+ #include "videodevice.h"
+ 
+@@ -280,7 +280,7 @@
+ //	printf("PrefsChannelPicker::PrefsChannelPicker 1\n");
+ 	this->mwindow = mwindow;
+ 	this->prefs = prefs;
+-	VDeviceBUZ::get_inputs(&input_sources);
++//	VDeviceBUZ::get_inputs(&input_sources);
+ }
+ 
+ PrefsChannelPicker::~PrefsChannelPicker()
+diff -Nru cinelerra-4.2/cinelerra/Makefile cinelerra-demo//cinelerra/Makefile
+--- cinelerra-4.2/cinelerra/Makefile	2009-11-02 12:11:09.000000000 -0800
++++ cinelerra-demo//cinelerra/Makefile	2011-07-01 14:12:09.890509891 -0700
+@@ -282,10 +282,8 @@
+ 	$(OBJDIR)/vautomation.o \
+ 	$(OBJDIR)/vdevice1394.o \
+ 	$(OBJDIR)/vdevicebase.o \
+-	$(OBJDIR)/vdevicebuz.o \
+ 	$(OBJDIR)/vdevicedvb.o \
+ 	$(OBJDIR)/vdeviceprefs.o \
+-	$(OBJDIR)/vdevicev4l.o \
+ 	$(OBJDIR)/vdevicev4l2.o \
+ 	$(OBJDIR)/vdevicev4l2jpeg.o \
+ 	$(OBJDIR)/vdevicex11.o \
+@@ -815,10 +813,8 @@
+ $(OBJDIR)/vautomation.o: 			  vautomation.C
+ $(OBJDIR)/vdevice1394.o: 			  vdevice1394.C
+ $(OBJDIR)/vdevicebase.o: 			  vdevicebase.C
+-$(OBJDIR)/vdevicebuz.o: 			  vdevicebuz.C
+ $(OBJDIR)/vdevicedvb.o:                           vdevicedvb.C
+ $(OBJDIR)/vdeviceprefs.o: 			  vdeviceprefs.C
+-$(OBJDIR)/vdevicev4l.o: 			  vdevicev4l.C
+ $(OBJDIR)/vdevicev4l2.o:                          vdevicev4l2.C
+ $(OBJDIR)/vdevicev4l2jpeg.o:                      vdevicev4l2jpeg.C
+ $(OBJDIR)/vdevicex11.o: 			  vdevicex11.C
+diff -Nru cinelerra-4.2/cinelerra/reversemake cinelerra-demo//cinelerra/reversemake
+--- cinelerra-4.2/cinelerra/reversemake	2008-07-09 17:51:32.000000000 -0700
++++ cinelerra-demo//cinelerra/reversemake	2011-07-01 14:12:24.563956934 -0700
+@@ -32,10 +32,8 @@
+ make $OBJDIR/vedits.o
+ make $OBJDIR/vedit.o
+ make $OBJDIR/vdevicex11.o
+-make $OBJDIR/vdevicev4l.o
+ make $OBJDIR/vdeviceprefs.o
+ make $OBJDIR/vdevicelml.o
+-make $OBJDIR/vdevicebuz.o
+ make $OBJDIR/vdevicebase.o
+ make $OBJDIR/vdevice1394.o
+ make $OBJDIR/vautomation.o
+diff -Nru cinelerra-4.2/cinelerra/videodevice.C cinelerra-demo//cinelerra/videodevice.C
+--- cinelerra-4.2/cinelerra/videodevice.C	2008-07-21 12:14:01.000000000 -0700
++++ cinelerra-demo//cinelerra/videodevice.C	2011-07-01 14:14:53.591779371 -0700
+@@ -36,9 +36,9 @@
+ #include "recordconfig.h"
+ #include "recordmonitor.h"
+ #include "vdevice1394.h"
+-#include "vdevicebuz.h"
++//#include "vdevicebuz.h"
+ #include "vdevicedvb.h"
+-#include "vdevicev4l.h"
++//#include "vdevicev4l.h"
+ #include "vdevicev4l2.h"
+ #include "vdevicev4l2jpeg.h"
+ #include "vdevicex11.h"
+@@ -193,12 +193,12 @@
+ 
+ 	switch(in_config->driver)
+ 	{
+-		case VIDEO4LINUX:
+-			keepalive = new KeepaliveThread(this);
+-			keepalive->start_keepalive();
+-			new_device_base();
+-			result = input_base->open_input();
+-			break;
++		//case VIDEO4LINUX:
++		//	keepalive = new KeepaliveThread(this);
++		//	keepalive->start_keepalive();
++		//	new_device_base();
++		//	result = input_base->open_input();
++		//	break;
+ 
+ 
+ #ifdef HAVE_VIDEO4LINUX2
+@@ -218,13 +218,13 @@
+ 			new_device_base();
+ 			result = input_base->open_input();
+ 			break;
+-		case CAPTURE_BUZ:
++		//case CAPTURE_BUZ:
+ //printf("VideoDevice 1\n");
+-			keepalive = new KeepaliveThread(this);
+-			keepalive->start_keepalive();
+-			new_device_base();
+-			result = input_base->open_input();
+-			break;
++		//	keepalive = new KeepaliveThread(this);
++		//	keepalive->start_keepalive();
++		//	new_device_base();
++		//	result = input_base->open_input();
++		//	break;
+ #ifdef HAVE_FIREWIRE
+ 		case CAPTURE_FIREWIRE:
+ 		case CAPTURE_IEC61883:
+@@ -247,8 +247,8 @@
+ {
+ 	switch(in_config->driver)
+ 	{
+-		case VIDEO4LINUX:
+-			return input_base = new VDeviceV4L(this);
++		//case VIDEO4LINUX:
++		//	return input_base = new VDeviceV4L(this);
+ 
+ #ifdef HAVE_VIDEO4LINUX2
+ 		case VIDEO4LINUX2:
+@@ -261,8 +261,8 @@
+ 		case SCREENCAPTURE:
+ 			return input_base = new VDeviceX11(this, 0);
+ 
+-		case CAPTURE_BUZ:
+-			return input_base = new VDeviceBUZ(this);
++		//case CAPTURE_BUZ:
++		//	return input_base = new VDeviceBUZ(this);
+ 
+ #ifdef HAVE_FIREWIRE
+ 		case CAPTURE_FIREWIRE:
+@@ -281,8 +281,8 @@
+ 	char *path = (char*)"";
+ 	switch(vconfig_in->driver)
+ 	{
+-		case VIDEO4LINUX:
+-			path = (char*)"channels_v4l";
++		//case VIDEO4LINUX:
++		//	path = (char*)"channels_v4l";
+ 			break;
+ 		case VIDEO4LINUX2:
+ 			path = (char*)"channels_v4l2";
+@@ -290,9 +290,9 @@
+ 		case VIDEO4LINUX2JPEG:
+ 			path = (char*)"channels_v4l2jpeg";
+ 			break;
+-		case CAPTURE_BUZ:
+-			path = (char*)"channels_buz";
+-			break;
++		//case CAPTURE_BUZ:
++		//	path = (char*)"channels_buz";
++		//	break;
+ 		case CAPTURE_DVB:
+ 			path = (char*)"channels_dvb";
+ 			break;
+@@ -377,12 +377,12 @@
+ 		case PLAYBACK_X11_GL:
+ 			return PLAYBACK_X11_GL_TITLE;
+ 			break;
+-		case PLAYBACK_BUZ:
+-			return PLAYBACK_BUZ_TITLE;
+-			break;
+-		case VIDEO4LINUX:
+-			return VIDEO4LINUX_TITLE;
+-			break;
++		//case PLAYBACK_BUZ:
++		//	return PLAYBACK_BUZ_TITLE;
++		//	break;
++		//case VIDEO4LINUX:
++		//	return VIDEO4LINUX_TITLE;
++		//	break;
+ 		case VIDEO4LINUX2:
+ 			return VIDEO4LINUX2_TITLE;
+ 			break;
+@@ -392,9 +392,9 @@
+ 		case SCREENCAPTURE:
+ 			return SCREENCAPTURE_TITLE;
+ 			break;
+-		case CAPTURE_BUZ:
+-			return CAPTURE_BUZ_TITLE;
+-			break;
++		//case CAPTURE_BUZ:
++		//	return CAPTURE_BUZ_TITLE;
++		//	break;
+ 		case CAPTURE_FIREWIRE:
+ 			return CAPTURE_FIREWIRE_TITLE;
+ 			break;
+diff -Nru cinelerra-4.2/cinelerra/videodevice.h cinelerra-demo//cinelerra/videodevice.h
+--- cinelerra-4.2/cinelerra/videodevice.h	2008-07-21 12:14:01.000000000 -0700
++++ cinelerra-demo//cinelerra/videodevice.h	2011-07-01 14:15:04.631865056 -0700
+@@ -42,9 +42,9 @@
+ #include "picture.inc"
+ #include "vdevicebase.inc"
+ #include "vdevice1394.inc"
+-#include "vdevicebuz.inc"
++//#include "vdevicebuz.inc"
+ #include "vdevicelml.inc"
+-#include "vdevicev4l.inc"
++//#include "vdevicev4l.inc"
+ #include "vdevicex11.inc"
+ #include "videoconfig.inc"
+ #include "videowindow.inc"

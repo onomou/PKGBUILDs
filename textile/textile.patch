@@ -1,0 +1,11 @@
+--- classTextile.php.orig	2011-07-08 12:04:05.306126208 -0700
++++ classTextile.php	2011-07-08 12:07:36.251350458 -0700
+@@ -560,7 +560,7 @@
+                 }
+             }
+ 
+-            $line = $this->doPBr($line);
++            //$line = $this->doPBr($line);
+             $line = preg_replace('/<br>/', '<br />', $line);
+ 
+             if ($ext and $anon)
