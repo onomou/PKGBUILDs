@@ -1,0 +1,304 @@
+diff -ru cinelerra-4.3.orig/cinelerra/overlayframe.C cinelerra-4.3/cinelerra/overlayframe.C
+--- cinelerra-4.3.orig/cinelerra/overlayframe.C	2011-07-25 03:09:17.000000000 -0700
++++ cinelerra-4.3/cinelerra/overlayframe.C	2011-08-07 17:09:08.153812639 -0700
+@@ -214,6 +214,34 @@
+ 			b = (b * opacity + output[2] * transparency) / max; \
+ 			break; \
+ 		} \
++		case TRANSFER_SOFTLIGHT: \
++			temp_type rt, gt, bt; \
++			rt = (temp_type)input1*(temp_type)output[0]/max; \
++			gt = (temp_type)input2*(temp_type)output[1]/max; \
++			bt = (temp_type)input3*(temp_type)output[2]/max; \
++			r = rt+(temp_type)input1*(max-((max-(temp_type)input1)*(max-(temp_type)output[0])/max)-rt)/max; \
++			g = gt+(temp_type)input2*(max-((max-(temp_type)input2)*(max-(temp_type)output[1])/max)-gt)/max; \
++			b = bt+(temp_type)input3*(max-((max-(temp_type)input3)*(max-(temp_type)output[2])/max)-bt)/max; \
++			r = (r * opacity + (temp_type)output[0] * transparency) / max; \
++			g = (g * opacity + (temp_type)output[1] * transparency) / max; \
++			b = (b * opacity + (temp_type)output[2] * transparency) / max; \
++			break; \
++		case TRANSFER_SCREEN: \
++			r = max - ((max-(temp_type)input1)*(max-(temp_type)output[0])/max); \
++			if(chroma_offset) \
++			{ \
++				g = my_abs((temp_type)input2 - chroma_offset) > my_abs((temp_type)output[1] - chroma_offset) ? input2 : output[1]; \
++				b = my_abs((temp_type)input3 - chroma_offset) > my_abs((temp_type)output[2] - chroma_offset) ? input3 : output[2]; \
++			} \
++			else \
++			{ \
++				g = max - ((max-(temp_type)input2)*(max-(temp_type)output[1])/max); \
++				b = max - ((max-(temp_type)input3)*(max-(temp_type)output[2])/max); \
++			} \
++			r = (r * opacity + (temp_type)output[0] * transparency) / max; \
++			g = (g * opacity + (temp_type)output[1] * transparency) / max; \
++			b = (b * opacity + (temp_type)output[2] * transparency) / max; \
++			break; \
+ 		case TRANSFER_REPLACE: \
+ 			r = input1; \
+ 			g = input2; \
+@@ -372,6 +400,36 @@
+ 			a = input4 < output4 ? input4 : output4; \
+ 			break; \
+ 		} \
++		case TRANSFER_SOFTLIGHT: \
++			temp_type rt, gt, bt; \
++			rt = (temp_type)input1*(temp_type)output1/max; \
++			gt = (temp_type)input2*(temp_type)output2/max; \
++			bt = (temp_type)input3*(temp_type)output3/max; \
++			r = rt+(temp_type)input1*(max-((max-(temp_type)input1)*(max-(temp_type)output1)/max)-rt)/max; \
++			g = gt+(temp_type)input2*(max-((max-(temp_type)input2)*(max-(temp_type)output2)/max)-gt)/max; \
++			b = bt+(temp_type)input3*(max-((max-(temp_type)input3)*(max-(temp_type)output3)/max)-bt)/max; \
++			r = (r * pixel_opacity + (temp_type)output1 * pixel_transparency) / max / max; \
++			g = (g * pixel_opacity + (temp_type)output2 * pixel_transparency) / max / max; \
++			b = (b * pixel_opacity + (temp_type)output3 * pixel_transparency) / max / max; \
++			a = input4 > output4 ? input4 : output4; \
++			break; \
++		case TRANSFER_SCREEN: \
++			r = max - ((max-(temp_type)input1)*(max-(temp_type)output1)/max); \
++			if(chroma_offset) \
++			{ \
++				g = my_abs((temp_type)input2 - chroma_offset) > my_abs((temp_type)output2 - chroma_offset) ? input2 : output2; \
++				b = my_abs((temp_type)input3 - chroma_offset) > my_abs((temp_type)output3 - chroma_offset) ? input3 : output3; \
++			} \
++			else \
++			{ \
++				g = max - ((max-(temp_type)input2)*(max-(temp_type)output2)/max); \
++				b = max - ((max-(temp_type)input3)*(max-(temp_type)output3)/max); \
++			} \
++			r = (r * pixel_opacity + (temp_type)output1 * pixel_transparency) / max / max; \
++			g = (g * pixel_opacity + (temp_type)output2 * pixel_transparency) / max / max; \
++			b = (b * pixel_opacity + (temp_type)output3 * pixel_transparency) / max / max; \
++			a = input4 > output4 ? input4 : output4; \
++			break; \
+ 		case TRANSFER_REPLACE: \
+ 			r = input1; \
+ 			g = input2; \
+diff -ru cinelerra-4.3.orig/cinelerra/overlayframe.inc cinelerra-4.3/cinelerra/overlayframe.inc
+--- cinelerra-4.3.orig/cinelerra/overlayframe.inc	2009-01-02 16:22:10.000000000 -0800
++++ cinelerra-4.3/cinelerra/overlayframe.inc	2011-08-07 17:10:03.500910924 -0700
+@@ -24,16 +24,18 @@
+ 
+ // Modes
+ 
+-#define TRANSFER_TYPES 8
++#define TRANSFER_TYPES 10
+ 
+ #define TRANSFER_NORMAL       0
+ #define TRANSFER_ADDITION     1
+ #define TRANSFER_SUBTRACT     2
+ #define TRANSFER_MULTIPLY     3
+-#define TRANSFER_DIVIDE 	  4
++#define TRANSFER_DIVIDE       4
+ #define TRANSFER_REPLACE      5
+ #define TRANSFER_MAX          6
+ #define TRANSFER_MIN          7
++#define TRANSFER_SOFTLIGHT    8
++#define TRANSFER_SCREEN       9
+ 
+ // Interpolation types
+ 
+diff -ru cinelerra-4.3.orig/cinelerra/patchbay.C cinelerra-4.3/cinelerra/patchbay.C
+--- cinelerra-4.3.orig/cinelerra/patchbay.C	2011-07-30 00:48:05.000000000 -0700
++++ cinelerra-4.3/cinelerra/patchbay.C	2011-08-07 17:10:46.891249579 -0700
+@@ -177,6 +177,12 @@
+ 	mode_icons[TRANSFER_MIN] = new BC_Pixmap(this, 
+ 		mwindow->theme->get_image("mode_min"),
+ 		PIXMAP_ALPHA);
++	mode_icons[TRANSFER_SOFTLIGHT] = new BC_Pixmap(this, 
++		mwindow->theme->get_image("mode_softlight"),
++		PIXMAP_ALPHA);
++	mode_icons[TRANSFER_SCREEN] = new BC_Pixmap(this, 
++		mwindow->theme->get_image("mode_screen"),
++		PIXMAP_ALPHA);
+ 
+ 	add_subwindow(nudge_popup = new NudgePopup(mwindow, this));
+ 	nudge_popup->create_objects();
+diff -ru cinelerra-4.3.orig/cinelerra/playback3d.C cinelerra-4.3/cinelerra/playback3d.C
+--- cinelerra-4.3.orig/cinelerra/playback3d.C	2011-07-26 12:20:00.000000000 -0700
++++ cinelerra-4.3/cinelerra/playback3d.C	2011-08-07 17:12:59.318951297 -0700
+@@ -181,6 +181,35 @@
+ 	"	gl_FragColor.a = min(gl_FragColor.a, canvas.a);\n"
+ 	"}\n";
+ 
++static char *blend_softlight_frag = 
++	"uniform sampler2D tex2;\n"
++	"uniform vec2 tex2_dimensions;\n"
++	"void main()\n"
++	"{\n"
++	"       vec4 canvas = texture2D(tex2, gl_FragCoord.xy / tex2_dimensions);\n"
++	"       vec3 opacity = vec3(gl_FragColor.a, gl_FragColor.a, gl_FragColor.a);\n"
++	"       vec3 transparency = vec3(1.0, 1.0, 1.0) - opacity;\n"
++	"       vec3 multiply = gl_FragColor.rgb * canvas.rgb;\n"
++	"       gl_FragColor.rgb = multiply.rgb + gl_FragColor.rgb * (1.0 - ((1.0 - gl_FragColor.rgb) * (1.0 - canvas.rgb)) - multiply.rgb);\n"
++	"       gl_FragColor.rgb *= opacity;\n"
++	"       gl_FragColor.rgb += canvas.rgb * transparency;\n"
++	"       gl_FragColor.a = max(gl_FragColor.a, canvas.a);\n"
++	"}\n";
++
++static char *blend_screen_frag = 
++	"uniform sampler2D tex2;\n"
++	"uniform vec2 tex2_dimensions;\n"
++	"void main()\n"
++	"{\n"
++	"       vec4 canvas = texture2D(tex2, gl_FragCoord.xy / tex2_dimensions);\n"
++	"       vec3 opacity = vec3(gl_FragColor.a, gl_FragColor.a, gl_FragColor.a);\n"
++	"       vec3 transparency = vec3(1.0, 1.0, 1.0) - opacity;\n"
++	"       gl_FragColor.rgb = 1.0 - (1.0 - gl_FragColor.rgb) * (1.0 - canvas.rgb);\n"
++	"       gl_FragColor.rgb *= opacity;\n"
++	"       gl_FragColor.rgb += canvas.rgb * transparency;\n"
++	"       gl_FragColor.a = max(gl_FragColor.a, canvas.a);\n"
++	"}\n";
++
+ static const char *blend_subtract_frag = 
+ 	"uniform sampler2D tex2;\n"
+ 	"uniform vec2 tex2_dimensions;\n"
+@@ -1039,6 +1068,16 @@
+ 				if(!total_shaders) shader_stack[total_shaders++] = read_texture_frag;
+ 				shader_stack[total_shaders++] = blend_divide_frag;
+ 				break;
++			case TRANSFER_SOFTLIGHT:
++				enable_overlay_texture(command);
++				if(!total_shaders) shader_stack[total_shaders++] = read_texture_frag;
++				shader_stack[total_shaders++] = blend_softlight_frag;
++				break;
++			case TRANSFER_SCREEN:
++				enable_overlay_texture(command);
++				if(!total_shaders) shader_stack[total_shaders++] = read_texture_frag;
++				shader_stack[total_shaders++] = blend_screen_frag;
++				break;
+ 		}
+ 
+ 		unsigned int frag_shader = 0;
+diff -ru cinelerra-4.3.orig/cinelerra/theme.C cinelerra-4.3/cinelerra/theme.C
+--- cinelerra-4.3.orig/cinelerra/theme.C	2009-08-04 11:41:16.000000000 -0700
++++ cinelerra-4.3/cinelerra/theme.C	2011-08-07 17:13:34.929230000 -0700
+@@ -137,6 +137,8 @@
+ 	new_image("mode_normal", "mode_normal.png");
+ 	new_image("mode_replace", "mode_replace.png");
+ 	new_image("mode_subtract", "mode_subtract.png");
++	new_image("mode_softlight", "mode_softlight.png");
++	new_image("mode_screen", "mode_screen.png");
+ }
+ 
+ 
+diff -ru cinelerra-4.3.orig/cinelerra/vpatchgui.C cinelerra-4.3/cinelerra/vpatchgui.C
+--- cinelerra-4.3.orig/cinelerra/vpatchgui.C	2009-01-02 16:22:10.000000000 -0800
++++ cinelerra-4.3/cinelerra/vpatchgui.C	2011-08-07 17:14:31.799675418 -0700
+@@ -335,6 +335,8 @@
+ 	add_item(new VModePatchItem(this, mode_to_text(TRANSFER_REPLACE), TRANSFER_REPLACE));
+ 	add_item(new VModePatchItem(this, mode_to_text(TRANSFER_MAX), TRANSFER_MAX));
+ 	add_item(new VModePatchItem(this, mode_to_text(TRANSFER_MIN), TRANSFER_MIN));
++	add_item(new VModePatchItem(this, mode_to_text(TRANSFER_SOFTLIGHT), TRANSFER_SOFTLIGHT));
++	add_item(new VModePatchItem(this, mode_to_text(TRANSFER_SCREEN), TRANSFER_SCREEN));
+ }
+ 
+ void VModePatch::update(int mode)
+@@ -384,6 +386,14 @@
+ 			return _("Min");
+ 			break;
+ 
++		case TRANSFER_SOFTLIGHT:
++			return _("Soft Light");
++			break;
++
++		case TRANSFER_SCREEN:
++			return _("Screen");
++			break;
++
+ 		default:
+ 			return _("Normal");
+ 			break;
+diff -ru cinelerra-4.3.orig/plugins/overlay/overlay.C cinelerra-4.3/plugins/overlay/overlay.C
+--- cinelerra-4.3.orig/plugins/overlay/overlay.C	2011-07-26 12:20:03.000000000 -0700
++++ cinelerra-4.3/plugins/overlay/overlay.C	2011-08-07 17:21:03.962757282 -0700
+@@ -208,6 +208,13 @@
+ 		case TRANSFER_MIN:
+ 			return "Min";
+ 			break;
++		case TRANSFER_SOFTLIGHT:
++			return "Soft Light";
++			break;
++
++		case TRANSFER_SCREEN:
++			return "Screen";
++			break;
+ 
+ 		default:
+ 			return "Normal";
+@@ -591,6 +598,25 @@
+ 	static char *blend_subtract_frag = 
+ 		"	result_color.rgb = dst_color.rgb - src_color.rgb;\n";
+ 
++	static char *blend_softlight_frag_float = 
++		"       vec4 multiply;\n"
++		"       multiply.rgb = dst_color.rgb*src_color.rgb;\n"
++		"       result_color.rgb = multiply.rgb+dst_color.rgb*(1.0-((1.0-dst_color.rgb)*(1.0-src_color.rgb))-multiply);\n";
++	static char *blend_softlight_frag_8bit = 
++		"       vec4 multiply;\n"
++		"       multiply.rgb = dst_color.rgb*src_color.rgb/0xff;\n"
++		"       result_color.rgb = multiply.rgb+dst_color.rgb*(0xff-((0xff-dst_color.rgb)*(0xff-src_color.rgb)/0xff)-multiply)/0xff;\n";
++	static char *blend_softlight_frag_16bit = 
++		"       vec4 multiply;\n"
++		"       multiply.rgb = dst_color.rgb*src_color.rgb/0xffff;\n"
++		"       result_color.rgb = multiply.rgb+dst_color.rgb*(0xffff-((0xffff-dst_color.rgb)*(0xffff-src_color.rgb)/0xffff)-multiply)/0xffff;\n";
++
++	static char *blend_screen_frag_float = 
++		"       result_color.rgb = 1.0-(1.0-dst_color.rgb)*(1.0-src_color.rgb);\n";
++	static char *blend_screen_frag_8bit = 
++		"       result_color.rgb = 0xff-((0xff-dst_color.rgb)*(0xff-src_color.rgb)/0xff);\n";
++	static char *blend_screen_frag_16bit = 
++		"       result_color.rgb = 0xffff-((0xffff-dst_color.rgb)*(0xffff-src_color.rgb)/0xffff);\n"
+ 
+ 	static char *blend_multiply_frag = 
+ 		"	result_color.rgb = dst_color.rgb * src_color.rgb;\n";
+@@ -663,6 +689,7 @@
+ 		src->bind_texture(0);
+ 		dst->bind_texture(1);
+ 
++		int colormodel = dst->get_color_model();
+ 
+ 		shader_stack[current_shader++] = get_pixels_frag;
+ 
+@@ -686,6 +713,30 @@
+ 			case TRANSFER_MIN:
+ 				shader_stack[current_shader++] = blend_min_frag;
+ 				break;
++			case TRANSFER_SOFTLIGHT:
++				if (colormodel == BC_RGB_FLOAT ||
++				    colormodel == BC_RGBA_FLOAT)
++					shader_stack[current_shader++] = blend_softlight_frag_float;
++				else if (colormodel == BC_RGB888 ||
++					 colormodel == BC_RGBA8888 ||
++					 colormodel == BC_YUV888 || 
++					 colormodel == BC_YUVA8888)
++					shader_stack[current_shader++] = blend_softlight_frag_8bit;
++				else
++					shader_stack[current_shader++] = blend_softlight_frag_16bit;
++					break;
++			case TRANSFER_SCREEN:
++				if (colormodel == BC_RGB_FLOAT ||
++				    colormodel == BC_RGBA_FLOAT)
++					shader_stack[current_shader++] = blend_screen_frag_float;
++				else if (colormodel == BC_RGB888 ||
++					 colormodel == BC_RGBA8888 ||
++					 colormodel == BC_YUV888 || 
++					 colormodel == BC_YUVA8888)
++					shader_stack[current_shader++] = blend_screen_frag_8bit;
++				else
++					shader_stack[current_shader++] = blend_screen_frag_16bit;
++					break;
+ 		}
+ 
+ 		shader_stack[current_shader++] = put_pixels_frag;
+diff -ru cinelerra-4.3.orig/plugins/suv/suv.C cinelerra-4.3/plugins/suv/suv.C
+--- cinelerra-4.3.orig/plugins/suv/suv.C	2010-11-09 16:19:53.000000000 -0800
++++ cinelerra-4.3/plugins/suv/suv.C	2011-08-07 17:28:19.756095216 -0700
+@@ -444,6 +444,8 @@
+ 	new_image("mode_subtract", "mode_subtract.png");
+ 	new_image("mode_max", "mode_max.png");
+ 	new_image("mode_min", "mode_min.png");
++	new_image("mode_softlight", "mode_softlight.png");
++	new_image("mode_screen", "mode_screen.png");
+ 
+ 	new_image_set("plugin_on", 5, "plugin_on.png", "plugin_onhi.png", "plugin_onselect.png", "plugin_ondn.png", "plugin_onselecthi.png");
+ 	new_image_set("plugin_show", 5, "plugin_show.png", "plugin_showhi.png", "plugin_showselect.png", "plugin_showdn.png", "plugin_showselecthi.png");

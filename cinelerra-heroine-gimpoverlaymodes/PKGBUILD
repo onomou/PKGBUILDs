@@ -1,0 +1,69 @@
+pkgname=cinelerra-heroine-gimplayermodes
+pkgver=4.3
+pkgrel=1
+pkgdesc="Cinelerra from the HeroineWarrior.com (with GIMP layer modes patch)"
+arch=('x86_64')
+url="http://www.heroinewarrior.com/cinelerra.php"
+license=('GPL')
+depends=('libpng' 'freeglut' 'libxv' 'termcap' 'libva')
+makedepends=('yasm' 'nasm' 'libtool')
+conflicts=('cinelerra-cv' 'cinelerra-heroine')
+provides=('cinelerra-heroine')
+source=(https://sourceforge.net/projects/heroines/files/cinelerra-$pkgver-src.tar.bz2
+	quicktime.patch
+	gimplayermodes-heroine.patch
+	http://www.floft.net/uploads/scripts/cinelerra/screen-black.png
+	http://www.floft.net/uploads/scripts/cinelerra/screen-gray.png
+	http://www.floft.net/uploads/scripts/cinelerra/softlight-black.png
+	http://www.floft.net/uploads/scripts/cinelerra/softlight-gray.png)
+md5sums=('42def96800668fa4a029bd1a982a4648'
+	 'c555059768637c1456b71a36748ed81b'
+	 '281fa9e3fd7ea4c773146e454f66b498'
+	 '1069981fe60347b885acb8731be4a2b5'
+	 'd255dc6de2d67e90c3be5bbd30892abd'
+	 '6e0fb2db3ec864db6a9157a855e05e12'
+	 'b11ef214d7d2317843e834953dc358da')
+sha256sums=('8f0fa7b8b33356f984e40d55bb362ac87651328c30741b30d1fec864e32dba4c'
+	    'bd8c849582ccf8608951e4755983b9c56bcbd73e1ea8a09a922a5ed21419c255'
+	    'd5f93f41d72476529b1b85023d42882a21fa7c086e3580bfbe31270242b26a48'
+	    '63c166c7a486a13a512433abf7a3c7286190b907cfd49fb9b2fde4421b1cf1ea'
+	    'c2047c009f80a674e96ef27de8e3ef7427bb6a8bdff73799e9c2a60e39b716d8'
+	    '2ac037e08ab45a685a7eec2ecce50bc903b154614a33466b36acbaa37b784892'
+	    'c9c4aa59496f37332d6dfc0737a4e6ca64aa3aa6f3241f19816ee5f62490c0fe')
+
+build() {
+  cd "$srcdir/cinelerra-$pkgver"
+
+  #make quicktime/ compile
+  patch -Np1 -i "$srcdir/quicktime.patch"
+
+  #add layer modes
+  patch -Np1 -i "$srcdir/gimplayermodes-heroine.patch"
+  cp "$srcdir/screen-black.png" cinelerra/data/mode_screen.png
+  cp "$srcdir/softlight-black.png" cinelerra/data/mode_softlight.png
+  cp "$srcdir/screen-gray.png" plugins/suv/data/mode_screen.png
+  cp "$srcdir/softlight-gray.png" plugins/suv/data/mode_softlight.png
+
+  ./configure
+  make
+}
+
+package() {
+  cd "${srcdir}/cinelerra-$pkgver"
+
+  #makes repackaging work
+  [ ! -e "bin/cinelerra" ] && \
+  	make -C cinelerra && \
+	make -C plugins
+
+  make install
+
+  #install puts it in bin/
+  rm -rf "$pkgdir/usr/lib/cinelerra/"
+  mkdir -p "$pkgdir/usr/lib/cinelerra/"
+  mv bin/* "$pkgdir/usr/lib/cinelerra/"
+
+  #no longer do it in .install
+  mkdir -p "$pkgdir/usr/bin/"
+  ln -s /usr/lib/cinelerra/cinelerra "$pkgdir/usr/bin/cinelerra"
+}

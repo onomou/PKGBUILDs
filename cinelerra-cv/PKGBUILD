@@ -2,7 +2,7 @@
 # Maintainer: Daniel J Griffiths <ghost1227@archlinux.us>
 
 pkgname=cinelerra-cv
-pkgver=20110703
+pkgver=20110807
 pkgrel=1
 pkgdesc="A complete audio and video production environment for Linux."
 arch=('i686' 'x86_64')
@@ -18,12 +18,12 @@ optdepends=('libgl: needed for the X11-OPENGL video driver support')
 options=('!libtool')
 source=(cinelerra-v4l1_removal.patch
 	gimplayermodes.patch
-	http://www.floft.net/uploads/scripts/cinelerra/screen.png
-	http://www.floft.net/uploads/scripts/cinelerra/softlight.png)
+	http://www.floft.net/uploads/scripts/cinelerra/screen-gray.png
+	http://www.floft.net/uploads/scripts/cinelerra/softlight-gray.png)
 md5sums=('bfa85e20809429d88eba4ab83e569612'
 	 'd81fefeebe3c999ad78e863f34338cf5'
-	 'dc3b562fb3301a16d458a84c2875380d'
-	 '692403e6fc04301b577cd40bcb5d30fa')
+	 'd255dc6de2d67e90c3be5bbd30892abd'
+	 'b11ef214d7d2317843e834953dc358da')
 
 _gitroot="git://git.cinelerra.org/j6t/cinelerra.git"
 _gitname="cinelerra"
@@ -58,8 +58,8 @@ build() {
   #from: http://www.pegtop.net/delphi/articles/blendmodes/
   #      http://docs.gimp.org/en/gimp-concepts-layer-modes.html
   patch -Np1 -i ${srcdir}/gimplayermodes.patch
-  for i in softlight.png screen.png; do
-    noext=${i//.*/}
+  for i in softlight-gray.png screen-gray.png; do
+    noext=${i//-*/}
     cp ${srcdir}/$i ./cinelerra/data/mode_$noext.png
     cp ${srcdir}/$i ./plugins/suv/data/mode_$noext.png
     cp ${srcdir}/$i ./plugins/bluedottheme/data/mode_$noext.png
