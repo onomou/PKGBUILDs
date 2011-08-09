@@ -1,4 +1,4 @@
-# Contributor: Garrett <http://www.floft.net/contact>
+# Maintainer: Garrett <floft.net/contact>
 # used: http://howto.gumph.org/content/pxe-boot-a-laptop/
 pkgname=netboot-pxe
 pkgver=0.9.8
