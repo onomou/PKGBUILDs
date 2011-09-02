@@ -8,7 +8,7 @@ pkgdesc="itree generating algorithm for Povray in Java"
 arch=('i686' 'x86_64')
 url="http://arbaro.sourceforge.net/"
 license="GPL"
-depends=('bash' 'openjdk6' 'povray')
+depends=('openjdk6' 'povray')
 source=("http://sourceforge.net/projects/$pkgname/files/$pkgname/$pkgver/${pkgname}_${_pkgver}.zip"
 	"$pkgname.sh")
 md5sums=('1442b47982485801e456e7a33dd7a3ec'
