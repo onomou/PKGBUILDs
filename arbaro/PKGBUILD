@@ -7,7 +7,7 @@ _pkgver=${pkgver//\./_}
 pkgdesc="itree generating algorithm for Povray in Java"
 arch=('i686' 'x86_64')
 url="http://arbaro.sourceforge.net/"
-license="GPL"
+license=("GPL")
 depends=('openjdk6' 'povray')
 source=("http://sourceforge.net/projects/$pkgname/files/$pkgname/$pkgver/${pkgname}_${_pkgver}.zip"
 	"$pkgname.sh")
