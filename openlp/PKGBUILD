@@ -9,7 +9,7 @@ license=('GPLv2')
 depends=('qt' 'python2' 'python2-pyqt' 'python2-distribute' 'phonon' 'python2-chardet'
 	'python-lxml' 'python-beautifulsoup' 'python2-sqlalchemy' 'python2-sip'
 	'python-pysqlite-legacy' 'python2-pyenchant' 'python-mako' 'python2-migrate')
-optdepends=('libreoffice: display impress presentations')
+optdepends=('libreoffice-impress: display impress presentations')
 install=openlp.install
 source=(http://sourceforge.net/projects/${pkgname}/files/${pkgname}/${pkgver}/OpenLP-${pkgver}-src.tar.gz openlp.sh)
 md5sums=('3e8ec2897980171ef5e122ac30506776' 'bb78637dd085de567dc8aea8699939bf')
