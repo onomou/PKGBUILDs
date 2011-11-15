@@ -1,0 +1,26 @@
+post_install() {
+	echo "Adding group aped"
+	groupadd aped
+	echo "Adding user aped"
+	useradd -g aped -s /bin/false aped
+	echo "Disabling password for aped"
+	passwd -l aped
+
+	echo
+	echo "Config in /etc: aped --cfg /etc/ape.conf"
+}
+
+post_upgrade() {
+	if grep aped /etc/passwd &>/dev/null; then
+		/bin/true
+	else
+		post_install
+	fi
+}
+
+post_remove() {
+	echo "Removing aped user"
+	userdel aped
+	echo "Removing group aped"
+	groupdel aped
+}

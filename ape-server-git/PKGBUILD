@@ -1,0 +1,87 @@
+# Maintainer: Garrett <floft.net/contact>
+
+###
+### Note: This will install, but I couldn't get it to work...
+###
+
+pkgname=ape-server-git
+pkgver=20111114
+pkgrel=1
+pkgdesc="ajax push engine"
+arch=('i686' 'x86_64')
+url="http://github.com/APE-Project/APE_Server"
+license=('GPL')
+depends=('mysql')
+backup=('etc/ape.conf')
+install=ape-server.install
+
+_gitroot="git://github.com/APE-Project/APE_Server.git"
+_gitname="ape-server"
+
+build() {
+        cd "$srcdir"
+        msg "Connecting to GIT server...."
+
+        if [[ -d $_gitname ]] ; then
+                cd "$_gitname" && git pull origin
+                msg "The local files are updated."
+        else
+                git clone "$_gitroot" "$_gitname"
+        fi
+
+        msg "GIT checkout done or server timeout"
+        msg "Starting make..."
+
+        rm -rf "$srcdir/$_gitname-build"
+        cp -r "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+        cd "$srcdir/$_gitname-build"
+
+        sed -i "s|/usr/local|/usr|g" Makefile
+
+        #taken from ./build.sh
+        HOST_OS=Linux
+        echo "#define USE_EPOLL_HANDLER" > ./src/configure.h
+        echo "LINUX_BUILD = 1" > ./modules/plateform.mk
+
+        echo "HAS_MYSQL = yes" > ./modules/mysql.mk
+        echo "#define _USE_MYSQL 1" >> ./src/configure.h
+        cd ./modules/deps/mysac/
+        make
+
+        cd ../../../deps/udns-0.0.9/
+        ./configure
+        #from: https://github.com/ibc/em-udns/issues/1
+        make sharedlib
+        ar r libudns.a *.lo
+        make
+
+        cd ../js/src/
+        ./configure
+        make -j8
+
+        cd ../../../
+        make
+
+        cd ./modules/
+        make
+	
+	cd ../bin/
+	sed -i "/uid/,/Server/s|daemon|aped|g" ape.conf
+	sed -i "s|\./ape\.log|/var/log/ape\.log|g" ape.conf
+	sed -i "s|\.\./modules/lib/|/usr/share/ape/modules/lib|g" ape.conf
+	sed -i "s|\.\./modules/conf/|/usr/share/ape/modules/conf|g" ape.conf
+}
+
+package() {
+        cd "$srcdir/$_gitname-build"
+
+        mkdir -p "$pkgdir/etc"
+        install -Dm644 "./bin/ape.conf" "$pkgdir/etc/ape.conf"
+
+        mkdir -p "$pkgdir/usr/bin"
+        install -Dm755 "./bin/aped" "$pkgdir/usr/bin/aped"
+        
+	mkdir -p "$pkgdir/usr/share/ape"
+	cp -r "./modules" "$pkgdir/usr/share/ape/"
+	cp -r "./scripts" "$pkgdir/usr/share/ape/"
+}
