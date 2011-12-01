@@ -1,14 +1,20 @@
 post_install() {
-	chown httpd:httpd /usr/share/webapps/bellsystem/config.xml
+	chown http:http /usr/share/webapps/bellsystem/config.xml
 
 	cat <<EOF
- - add "bellsystem" to rc.conf (and optionally bell-{ssh,http})
+ - add "bellsystem" to rc.conf
  - run "/usr/share/bellsystem/password.sh" to change the web UI password
- - add "Include /etc/httpd/conf/extra/httpd-bellsystem.conf" to httpd.conf
+ - manually change device location in /usr/share/webapps/bellsystem/config.xml
+ - add one of the following two lines to /etc/httpd/conf/httpd.conf
+        Include /etc/httpd/conf/extra/httpd-bellsystem.conf
+        Include /etc/httpd/conf/extra/httpd-bellsystem-root.conf
  - add "/usr/share/webapps/" to open_basedir in /etc/php/php.ini
+ - start httpd and go to http://localhost:port/bellsystem
 EOF
 }
-#post_upgrade() { }
+post_upgrade() {
+	chown http:http /usr/share/webapps/bellsystem/config.xml
+}
 post_remove() {
 	cat <<EOF
  - remove "bellsystem" from rc.conf

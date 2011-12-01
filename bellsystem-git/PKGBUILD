@@ -19,10 +19,10 @@ build() {
 	msg "Connecting to GIT server..."
 
 	if [[ -d $_gitname ]]; then
-		cd "$_gitname"
+		cd "$_gitname/"
 		git pull origin
 		msg "The local files have been updated."
-		cd "$srcdir"
+		cd "$srcdir/"
 	else
 		git clone "$_gitroot" "$_gitname"
 	fi
@@ -38,9 +38,11 @@ build() {
 }
 
 package() {
-	cd "$srcdir/$_gitname-build/daemon"
+	cd "$srcdir/$_gitname-build/daemon/"
 
 	make PREFIX=/usr DESTDIR="$pkgdir" install
+
+	cd "$srcdir/$_gitname-build/"
 
 	mkdir -p "$pkgdir/etc/rc.d/"
 	mkdir -p "$pkgdir/etc/conf.d/"
@@ -48,12 +50,13 @@ package() {
 	mkdir -p "$pkgdir/usr/share/bellsystem/"
 	mkdir -p "$pkgdir/usr/share/webapps/bellsystem/"
 
-	install -Dm644 "install/bellsystem.daemon"     "$pkgdir/etc/rc.d/bellsystem"
-	install -Dm644 "install/bell-http.daemon"      "$pkgdir/etc/rc.d/bell-http"
-	install -Dm644 "install/bell-ssh.daemon"       "$pkgdir/etc/rc.d/bell-ssh"
-	install -Dm644 "install/bellsystem.conf"       "$pkgdir/etc/conf.d/bellsystem"
-	install -Dm644 "install/httpd-bellsystem.conf" "$pkgdir/etc/httpd/conf/extra/"
-	install -Dm755 "install/password.sh"           "$pkgdir/usr/share/bellsystem/"
+	install -Dm644 "install/bellsystem.daemon"          "$pkgdir/etc/rc.d/bellsystem"
+	install -Dm644 "install/bell-http.daemon"           "$pkgdir/etc/rc.d/bell-http"
+	install -Dm644 "install/bell-ssh.daemon"            "$pkgdir/etc/rc.d/bell-ssh"
+	install -Dm644 "install/bellsystem.conf"            "$pkgdir/etc/conf.d/bellsystem"
+	install -Dm644 "install/httpd-bellsystem.conf"      "$pkgdir/etc/httpd/conf/extra/"
+	install -Dm644 "install/httpd-bellsystem-root.conf" "$pkgdir/etc/httpd/conf/extra/"
+	install -Dm755 "install/password.sh"                "$pkgdir/usr/share/bellsystem/"
 
-	cp -r www/* "$pkgdir/usr/share/webapps/bellsystem/"
+	cp -r www/.htaccess www/* "$pkgdir/usr/share/webapps/bellsystem/"
 }
