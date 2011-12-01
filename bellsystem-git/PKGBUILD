@@ -50,9 +50,9 @@ package() {
 	mkdir -p "$pkgdir/usr/share/bellsystem/"
 	mkdir -p "$pkgdir/usr/share/webapps/bellsystem/"
 
-	install -Dm644 "install/bellsystem.daemon"          "$pkgdir/etc/rc.d/bellsystem"
-	install -Dm644 "install/bell-http.daemon"           "$pkgdir/etc/rc.d/bell-http"
-	install -Dm644 "install/bell-ssh.daemon"            "$pkgdir/etc/rc.d/bell-ssh"
+	install -Dm755 "install/bellsystem.daemon"          "$pkgdir/etc/rc.d/bellsystem"
+	install -Dm755 "install/bell-http.daemon"           "$pkgdir/etc/rc.d/bell-http"
+	install -Dm755 "install/bell-ssh.daemon"            "$pkgdir/etc/rc.d/bell-ssh"
 	install -Dm644 "install/bellsystem.conf"            "$pkgdir/etc/conf.d/bellsystem"
 	install -Dm644 "install/httpd-bellsystem.conf"      "$pkgdir/etc/httpd/conf/extra/"
 	install -Dm644 "install/httpd-bellsystem-root.conf" "$pkgdir/etc/httpd/conf/extra/"
