@@ -6,10 +6,9 @@ post_install() {
  - run "/usr/share/bellsystem/password.sh" to change the web UI password
  - manually change device location in /usr/share/webapps/bellsystem/config.xml
  - add one of the following two lines to /etc/httpd/conf/httpd.conf
-        Include conf/extra/httpd-bellsystem.conf
-        Include conf/extra/httpd-bellsystem-root.conf
+        Include conf/extra/httpd-bellsystem.conf       # /bellsystem
+        Include conf/extra/httpd-bellsystem-root.conf  # /
  - add "/usr/share/webapps/" to open_basedir in /etc/php/php.ini
- - start httpd and go to http://localhost:port/bellsystem
 EOF
 }
 post_upgrade() {
