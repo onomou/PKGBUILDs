@@ -1,0 +1,17 @@
+post_install() {
+	chown httpd:httpd /usr/share/webapps/bellsystem/config.xml
+
+	cat <<EOF
+ - add "bellsystem" to rc.conf (and optionally bell-{ssh,http})
+ - run "/usr/share/bellsystem/password.sh" to change the web UI password
+ - add "Include /etc/httpd/conf/extra/httpd-bellsystem.conf" to httpd.conf
+ - add "/usr/share/webapps/" to open_basedir in /etc/php/php.ini
+EOF
+}
+#post_upgrade() { }
+post_remove() {
+	cat <<EOF
+ - remove "bellsystem" from rc.conf
+ - remove httpd-bellsystem.conf include line from httpd.conf
+EOF
+}
