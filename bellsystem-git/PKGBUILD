@@ -1,6 +1,6 @@
 # Maintainer: Garrett <floft.net/contact>
 pkgname=bellsystem-git
-pkgver=20111201
+pkgver=20111222
 pkgrel=1
 pkgdesc="A simple bell system written in C++ with a web UI in PHP."
 arch=('i686' 'x86_64')
