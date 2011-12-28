@@ -1,0 +1,20 @@
+# Maintainer: Garrett <floft.net/contact>
+pkgname=systemd-garrett-units
+pkgver=20111226
+pkgrel=1
+pkgdesc="Some systemd units"
+arch=('any')
+url="http://github.com/Floft/PKGBUILDs/tree/master/systemd-garrett-units"
+license=('GPLv3')
+depends=('systemd')
+source=()
+md5sums=()
+
+package() {
+	mkdir -p "$pkgdir/lib/systemd/system/"
+	cd       "$pkgdir/lib/systemd/system/"
+
+	for file in "$srcdir/.."/*.service; do 
+		install -Dm644 "$file" ./
+	done
+}

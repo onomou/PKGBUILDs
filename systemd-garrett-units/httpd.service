@@ -1,0 +1,11 @@
+[Unit]
+Description=Apache
+
+[Service]
+Type=forking
+ExecStart=/etc/rc.d/httpd start
+ExecStop=/etc/rc.d/httpd stop
+ExecReload=/etc/rc.d/httpd reload
+
+[Install]
+WantedBy=multi-user.target

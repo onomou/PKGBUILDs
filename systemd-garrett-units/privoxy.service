@@ -1,0 +1,11 @@
+[Unit]
+Description=Privoxy
+
+[Service]
+Type=forking
+PIDFile=/var/run/privoxy.pid
+ExecStart=/etc/rc.d/privoxy start
+ExecStop=/etc/rc.d/privoxy stop
+
+[Install]
+WantedBy=multi-user.target

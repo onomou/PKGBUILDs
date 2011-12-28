@@ -1,0 +1,9 @@
+[Unit]
+Description=Mysql
+
+[Service]
+PIDFile=/var/run/mysqld
+ExecStart=/usr/bin/mysqld_safe --user=mysql
+
+[Install]
+WantedBy=multi-user.target
