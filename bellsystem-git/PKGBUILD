@@ -32,17 +32,15 @@ build() {
 
 	rm -rf "$_gitname-build"
 	cp -r "$_gitname" "$_gitname-build"
-	cd "$_gitname-build/daemon"
+	cd "$_gitname-build"
 	
 	make
 }
 
 package() {
-	cd "$srcdir/$_gitname-build/daemon/"
+	cd "$srcdir/$_gitname-build/"
 
 	make PREFIX=/usr DESTDIR="$pkgdir" install
-
-	cd "$srcdir/$_gitname-build/"
 
 	mkdir -p "$pkgdir/etc/rc.d/"
 	mkdir -p "$pkgdir/etc/conf.d/"
