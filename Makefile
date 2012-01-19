@@ -6,5 +6,5 @@ all:
 
 clean:
 	find -mindepth 1 -maxdepth 2 -type d \( -name pkg -o -name src \) -exec rm -rf {} +
-	find -mindepth 1 -maxdepth 2 -type f \( -name '*.xz' -o -name '*.gz' -o -name '*.zip' -o -name '*.bz2' \) -delete
+	find -mindepth 1 -maxdepth 2 -type f \( -name '*.tar.[gx]z' -o '*.zip' -o -name '*.bz2' \) -delete
 	find -name '*~' -delete
