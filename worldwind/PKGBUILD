@@ -8,7 +8,7 @@ license=("GPL")
 arch=('i686' 'x86_64')
 depends=('jogl')
 makedepends=()
-source=(http://sourceforge.net/projects/nasa-exp/files/World%20Wind%20Java/$pkgver/worldwind-release.$pkgver.zip)
+source=(http://sourceforge.net/projects/nasa-exp/files/World%20Wind%20Java/$pkgver/worldwind-release.$pkgver.zip/download)
 md5sums=('6efb29a4720c98503bcabb18810f7d2b')
 
 build() {
