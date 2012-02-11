@@ -11,7 +11,7 @@ makedepends=('git')
 backup=('etc/conf.d/bellsystem' 'usr/share/webapps/bellsystem/config.xml')
 install=bellsystem.install
 
-_gitroot="git://github.com/Floft/BellSystem.git"
+_gitroot="git://github.com/floft/BellSystem.git"
 _gitname="bellsystem"
 
 build() {
