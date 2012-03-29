@@ -1,0 +1,10 @@
+[Unit]
+Description=Acpid
+
+[Service]
+Type=forking
+ExecStart=/etc/rc.d/acpid start
+ExecStop=/etc/rc.d/acpid stop
+
+[Install]
+WantedBy=multi-user.target
