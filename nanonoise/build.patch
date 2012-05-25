@@ -1,0 +1,46 @@
+diff -ru koppi-nanonoise-78bccb8/RenoiseKeyBindings.cpp mine/RenoiseKeyBindings.cpp
+--- koppi-nanonoise-78bccb8/RenoiseKeyBindings.cpp	2012-01-22 09:52:16.000000000 -0800
++++ mine/RenoiseKeyBindings.cpp	2012-05-16 19:46:35.457834794 -0700
+@@ -46,7 +46,7 @@
+   QDomNodeList cat = doc.documentElement().elementsByTagName("Category");
+   for (int c = 0; c < int(cat.length()); ++c) {
+     QDomElement e = cat.item(c).toElement();
+-    RenoiseCategory c(e);
+-    categories.append(c);
++    RenoiseCategory d(e);
++    categories.append(d);
+   }
+ }
+diff -ru koppi-nanonoise-78bccb8/main.cpp mine/main.cpp
+--- koppi-nanonoise-78bccb8/main.cpp	2012-01-22 09:52:16.000000000 -0800
++++ mine/main.cpp	2012-05-16 19:46:35.461168157 -0700
+@@ -8,6 +8,7 @@
+ #endif
+ 
+ #include <stdio.h>
++#include <unistd.h>
+ 
+ #ifdef HAVE_EXECINFO_H
+ #ifdef HAVE_UCONTEXT_H
+diff -ru koppi-nanonoise-78bccb8/nanonoise.pro mine/nanonoise.pro
+--- koppi-nanonoise-78bccb8/nanonoise.pro	2012-01-22 09:52:16.000000000 -0800
++++ mine/nanonoise.pro	2012-05-16 19:48:07.615326362 -0700
+@@ -27,12 +27,13 @@
+     CONFIG += link_pkgconfig
+     PKGCONFIG += alsa
+     LIBS += -L/usr/lib/X11 \
+-        -lXtst
+-    nanonoise-binary.path = /usr/bin
++        -lXtst \
++	-lX11
++    nanonoise-binary.path = $$DESTDIR$$PREFIX/bin
+     nanonoise-binary.files = nanonoise
+-    nanonoise-icons.path = /usr/share/pixmaps
++    nanonoise-icons.path = $$DESTDIR$$PREFIX/share/pixmaps
+     nanonoise-icons.files = images/nanonoise.xpm
+-    nanonoise-desktop.path = /usr/share/applications
++    nanonoise-desktop.path = $$DESTDIR$$PREFIX/share/applications
+     nanonoise-desktop.files = nanonoise.desktop
+ 
+     INSTALLS += nanonoise-binary nanonoise-icons nanonoise-desktop
+Only in mine/: nanonoise.pro~

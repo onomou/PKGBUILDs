@@ -1,0 +1,27 @@
+# Maintainer: Garrett <floft.net/contact> 
+pkgname=nanonoise
+pkgver=1
+pkgrel=1
+pkgdesc="Tool to control Renoise via MIDI"
+arch=('i686' 'x86_64')
+url="http://koppi.github.com/nanonoise"
+license=('MIT')
+depends=('qt' 'libxtst' 'libx11')
+source=("nanonoise.tar.gz::http://github.com/koppi/nanonoise/tarball/master"
+	"build.patch")
+md5sums=('a2d1e815d25dfceae1deadd845e012c7'
+	 '9581ca5655d6ecf225ce7e4bb1c3c891')
+
+build() {
+	cd "$srcdir/koppi-nanonoise-"*
+
+	patch -p1 -i "$srcdir/build.patch"
+
+	qmake PREFIX=/usr DESTDIR="$pkgdir"
+	make
+}
+
+package() {
+	cd "$srcdir/koppi-nanonoise-"*
+	make install
+}
