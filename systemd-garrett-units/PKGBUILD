@@ -11,8 +11,8 @@ source=()
 md5sums=()
 
 package() {
-	mkdir -p "$pkgdir/lib/systemd/system/"
-	cd       "$pkgdir/lib/systemd/system/"
+	mkdir -p "$pkgdir/usr/lib/systemd/system/"
+	cd       "$pkgdir/usr/lib/systemd/system/"
 
 	for file in "$srcdir/.."/*.service; do 
 		install -Dm644 "$file" ./
