@@ -1,12 +1,13 @@
 # Maintainer: Garrett <floft.net/contact>
 pkgname=bellsystem-git
-pkgver=20111222
+pkgver=20120815
 pkgrel=1
 pkgdesc="A simple bell system written in C++ with a web UI in PHP."
-arch=('i686' 'x86_64')
+arch=('arm' 'i686' 'x86_64')
 url="http://floft.net/wiki/Bells.html"
 license=('ISC')
 depends=('glibc' 'libxml++' 'apache' 'php-apache' 'php')
+optdepends=('autossh')
 makedepends=('git')
 backup=('etc/conf.d/bellsystem' 'usr/share/webapps/bellsystem/config.xml')
 install=bellsystem.install
