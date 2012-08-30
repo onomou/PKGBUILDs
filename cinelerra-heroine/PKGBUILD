@@ -45,7 +45,6 @@ package() {
   mkdir -p "$pkgdir/usr/lib/cinelerra/"
   mv bin/* "$pkgdir/usr/lib/cinelerra/"
 
-  #no longer do it in .install
   mkdir -p "$pkgdir/usr/bin/"
   ln -s /usr/lib/cinelerra/cinelerra "$pkgdir/usr/bin/cinelerra"
 }

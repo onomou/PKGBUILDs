@@ -2,16 +2,18 @@
 pkgname=cinelerra-heroine-gimplayermodes
 pkgver=4.3
 pkgrel=1
-pkgdesc="Cinelerra from the HeroineWarrior.com (with GIMP layer modes patch)"
+pkgdesc="Cinelerra from the HeroineWarrior.com (64-bit, with GIMP layer modes patch)"
 arch=('x86_64')
 url="http://www.heroinewarrior.com/cinelerra.php"
 license=('GPL')
 depends=('libpng' 'freeglut' 'libxv' 'termcap' 'libva')
 makedepends=('yasm' 'nasm' 'libtool')
-conflicts=('cinelerra-cv' 'cinelerra-heroine')
+#conflicts=('cinelerra-cv' 'cinelerra-heroine')
+conflicts=('cinelerra-heroine')
 provides=('cinelerra-heroine')
 source=(https://sourceforge.net/projects/heroines/files/cinelerra-$pkgver-src.tar.bz2
 	quicktime.patch
+	speech_tools.patch
 	gimplayermodes-heroine.patch
 	http://www.floft.net/uploads/scripts/cinelerra/screen-black.png
 	http://www.floft.net/uploads/scripts/cinelerra/screen-gray.png
@@ -19,6 +21,7 @@ source=(https://sourceforge.net/projects/heroines/files/cinelerra-$pkgver-src.ta
 	http://www.floft.net/uploads/scripts/cinelerra/softlight-gray.png)
 md5sums=('42def96800668fa4a029bd1a982a4648'
 	 'c555059768637c1456b71a36748ed81b'
+	 '427b433561dd5f3240fcfc4a407146ce'
 	 '281fa9e3fd7ea4c773146e454f66b498'
 	 '1069981fe60347b885acb8731be4a2b5'
 	 'd255dc6de2d67e90c3be5bbd30892abd'
@@ -26,6 +29,7 @@ md5sums=('42def96800668fa4a029bd1a982a4648'
 	 'b11ef214d7d2317843e834953dc358da')
 sha256sums=('8f0fa7b8b33356f984e40d55bb362ac87651328c30741b30d1fec864e32dba4c'
 	    'bd8c849582ccf8608951e4755983b9c56bcbd73e1ea8a09a922a5ed21419c255'
+	    'e9c67c4048eed7e25f7cbd4ca94a071600563d44ddea8269f28d0d632407e3f4'
 	    'd5f93f41d72476529b1b85023d42882a21fa7c086e3580bfbe31270242b26a48'
 	    '63c166c7a486a13a512433abf7a3c7286190b907cfd49fb9b2fde4421b1cf1ea'
 	    'c2047c009f80a674e96ef27de8e3ef7427bb6a8bdff73799e9c2a60e39b716d8'
@@ -35,8 +39,9 @@ sha256sums=('8f0fa7b8b33356f984e40d55bb362ac87651328c30741b30d1fec864e32dba4c'
 build() {
   cd "$srcdir/cinelerra-$pkgver"
 
-  #make quicktime/ compile
+  #fixes to make it compile
   patch -Np1 -i "$srcdir/quicktime.patch"
+  patch -Np1 -i "$srcdir/speech_tools.patch"
 
   #add layer modes
   patch -Np1 -i "$srcdir/gimplayermodes-heroine.patch"
@@ -60,11 +65,11 @@ package() {
   make install
 
   #install puts it in bin/
-  rm -rf "$pkgdir/usr/lib/cinelerra/"
-  mkdir -p "$pkgdir/usr/lib/cinelerra/"
-  mv bin/* "$pkgdir/usr/lib/cinelerra/"
+  rm -rf "$pkgdir/usr/lib/cinelerra-heroine/"
+  mkdir -p "$pkgdir/usr/lib/cinelerra-heroine/"
+  mv bin/* "$pkgdir/usr/lib/cinelerra-heroine/"
 
-  #no longer do it in .install
   mkdir -p "$pkgdir/usr/bin/"
-  ln -s /usr/lib/cinelerra/cinelerra "$pkgdir/usr/bin/cinelerra"
+  #ln -s /usr/lib/cinelerra/cinelerra "$pkgdir/usr/bin/cinelerra"
+  ln -s /usr/lib/cinelerra-heroine/cinelerra "$pkgdir/usr/bin/cinelerra-heroine"
 }
