@@ -1,0 +1,2 @@
+groupadd fancontrollers
+usermod -a -G fancontrollers username
