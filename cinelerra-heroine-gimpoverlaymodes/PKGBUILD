@@ -1,40 +1,39 @@
 # Maintainer: Garrett <floft.net/contact>
-pkgname=cinelerra-heroine-gimplayermodes
-pkgver=4.3
+pkgname=cinelerra-heroine-gimpoverlaymodes
+pkgver=4.4
 pkgrel=1
-pkgdesc="Cinelerra from the HeroineWarrior.com (64-bit, with GIMP layer modes patch)"
+pkgdesc="Cinelerra from the HeroineWarrior.com (64-bit)"
 arch=('x86_64')
 url="http://www.heroinewarrior.com/cinelerra.php"
 license=('GPL')
-depends=('libpng' 'freeglut' 'libxv' 'termcap' 'libva')
+depends=('libpng' 'libpng12' 'freeglut' 'libxv' 'termcap' 'libva')
 makedepends=('yasm' 'nasm' 'libtool')
-#conflicts=('cinelerra-cv' 'cinelerra-heroine')
-conflicts=('cinelerra-heroine')
+conflicts=('cinelerra-cv' 'cinelerra-heroine')
 provides=('cinelerra-heroine')
-source=(https://sourceforge.net/projects/heroines/files/cinelerra-$pkgver-src.tar.bz2
+source=(https://sourceforge.net/projects/heroines/files/cinelerra-$pkgver-src.tar.xz
 	quicktime.patch
 	speech_tools.patch
-	gimplayermodes-heroine.patch
+	gimpoverlaymodes-heroine.patch
 	http://www.floft.net/uploads/scripts/cinelerra/screen-black.png
 	http://www.floft.net/uploads/scripts/cinelerra/screen-gray.png
 	http://www.floft.net/uploads/scripts/cinelerra/softlight-black.png
 	http://www.floft.net/uploads/scripts/cinelerra/softlight-gray.png)
-md5sums=('42def96800668fa4a029bd1a982a4648'
+md5sums=('252d811546025470ae4d7fa31c1f52d4'
 	 'c555059768637c1456b71a36748ed81b'
 	 '427b433561dd5f3240fcfc4a407146ce'
-	 '281fa9e3fd7ea4c773146e454f66b498'
+	 '4ae8c471448d70f943deaa079bf08189'
 	 '1069981fe60347b885acb8731be4a2b5'
 	 'd255dc6de2d67e90c3be5bbd30892abd'
 	 '6e0fb2db3ec864db6a9157a855e05e12'
 	 'b11ef214d7d2317843e834953dc358da')
-sha256sums=('8f0fa7b8b33356f984e40d55bb362ac87651328c30741b30d1fec864e32dba4c'
-	    'bd8c849582ccf8608951e4755983b9c56bcbd73e1ea8a09a922a5ed21419c255'
-	    'e9c67c4048eed7e25f7cbd4ca94a071600563d44ddea8269f28d0d632407e3f4'
-	    'd5f93f41d72476529b1b85023d42882a21fa7c086e3580bfbe31270242b26a48'
-	    '63c166c7a486a13a512433abf7a3c7286190b907cfd49fb9b2fde4421b1cf1ea'
-	    'c2047c009f80a674e96ef27de8e3ef7427bb6a8bdff73799e9c2a60e39b716d8'
-	    '2ac037e08ab45a685a7eec2ecce50bc903b154614a33466b36acbaa37b784892'
-	    'c9c4aa59496f37332d6dfc0737a4e6ca64aa3aa6f3241f19816ee5f62490c0fe')
+sha1sums=('e383f66103e4b1b53623b2d02dc6655d465384b1'
+	  'cd1e26d9cec3a3ea47e3f04b90fdbd4e0144fdf9'
+	  '463b5f84a50bd002f2e0750a53649f01b800b293'
+	  'dee2143d254b1fec8d3b8eb8257ada6d795125f3'
+	  'a4c45f2991edd9ebb12ba478da206e0e8d581712'
+	  '2081326b92e37d88ccf7d1393816747a21bddd88'
+	  '90c345ec1746e2e466acfa5040dc6e8f516a87f6'
+	  '527005215fd48019085b44d77014b2546e114a52')
 
 build() {
   cd "$srcdir/cinelerra-$pkgver"
@@ -44,7 +43,7 @@ build() {
   patch -Np1 -i "$srcdir/speech_tools.patch"
 
   #add layer modes
-  patch -Np1 -i "$srcdir/gimplayermodes-heroine.patch"
+  patch -Np1 -i "$srcdir/gimpoverlaymodes-heroine.patch"
   cp "$srcdir/screen-black.png" cinelerra/data/mode_screen.png
   cp "$srcdir/softlight-black.png" cinelerra/data/mode_softlight.png
   cp "$srcdir/screen-gray.png" plugins/suv/data/mode_screen.png
@@ -65,11 +64,10 @@ package() {
   make install
 
   #install puts it in bin/
-  rm -rf "$pkgdir/usr/lib/cinelerra-heroine/"
-  mkdir -p "$pkgdir/usr/lib/cinelerra-heroine/"
-  mv bin/* "$pkgdir/usr/lib/cinelerra-heroine/"
+  rm -rf "$pkgdir/usr/lib/cinelerra/"
+  mkdir -p "$pkgdir/usr/lib/cinelerra/"
+  mv bin/* "$pkgdir/usr/lib/cinelerra/"
 
   mkdir -p "$pkgdir/usr/bin/"
-  #ln -s /usr/lib/cinelerra/cinelerra "$pkgdir/usr/bin/cinelerra"
-  ln -s /usr/lib/cinelerra-heroine/cinelerra "$pkgdir/usr/bin/cinelerra-heroine"
+  ln -s /usr/lib/cinelerra/cinelerra "$pkgdir/usr/bin/cinelerra"
 }

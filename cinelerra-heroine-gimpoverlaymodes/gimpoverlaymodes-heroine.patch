@@ -1,6 +1,6 @@
-diff -ru cinelerra-4.3.orig/cinelerra/overlayframe.C cinelerra-4.3/cinelerra/overlayframe.C
---- cinelerra-4.3.orig/cinelerra/overlayframe.C	2011-07-25 03:09:17.000000000 -0700
-+++ cinelerra-4.3/cinelerra/overlayframe.C	2011-08-07 17:09:08.153812639 -0700
+diff -ur cinelerra-4.4.orig/cinelerra/overlayframe.C cinelerra-4.4/cinelerra/overlayframe.C
+--- cinelerra-4.4.orig/cinelerra/overlayframe.C	2012-09-08 22:21:43.190231183 -0700
++++ cinelerra-4.4/cinelerra/overlayframe.C	2012-09-08 22:25:37.753825783 -0700
 @@ -214,6 +214,34 @@
  			b = (b * opacity + output[2] * transparency) / max; \
  			break; \
@@ -73,10 +73,10 @@ diff -ru cinelerra-4.3.orig/cinelerra/overlayframe.C cinelerra-4.3/cinelerra/ove
  		case TRANSFER_REPLACE: \
  			r = input1; \
  			g = input2; \
-diff -ru cinelerra-4.3.orig/cinelerra/overlayframe.inc cinelerra-4.3/cinelerra/overlayframe.inc
---- cinelerra-4.3.orig/cinelerra/overlayframe.inc	2009-01-02 16:22:10.000000000 -0800
-+++ cinelerra-4.3/cinelerra/overlayframe.inc	2011-08-07 17:10:03.500910924 -0700
-@@ -24,16 +24,18 @@
+diff -ur cinelerra-4.4.orig/cinelerra/overlayframe.inc cinelerra-4.4/cinelerra/overlayframe.inc
+--- cinelerra-4.4.orig/cinelerra/overlayframe.inc	2012-09-08 22:21:43.206897155 -0700
++++ cinelerra-4.4/cinelerra/overlayframe.inc	2012-09-08 22:26:41.351185769 -0700
+@@ -24,7 +24,7 @@
  
  // Modes
  
@@ -85,10 +85,7 @@ diff -ru cinelerra-4.3.orig/cinelerra/overlayframe.inc cinelerra-4.3/cinelerra/o
  
  #define TRANSFER_NORMAL       0
  #define TRANSFER_ADDITION     1
- #define TRANSFER_SUBTRACT     2
- #define TRANSFER_MULTIPLY     3
--#define TRANSFER_DIVIDE 	  4
-+#define TRANSFER_DIVIDE       4
+@@ -34,6 +34,8 @@
  #define TRANSFER_REPLACE      5
  #define TRANSFER_MAX          6
  #define TRANSFER_MIN          7
@@ -97,9 +94,9 @@ diff -ru cinelerra-4.3.orig/cinelerra/overlayframe.inc cinelerra-4.3/cinelerra/o
  
  // Interpolation types
  
-diff -ru cinelerra-4.3.orig/cinelerra/patchbay.C cinelerra-4.3/cinelerra/patchbay.C
---- cinelerra-4.3.orig/cinelerra/patchbay.C	2011-07-30 00:48:05.000000000 -0700
-+++ cinelerra-4.3/cinelerra/patchbay.C	2011-08-07 17:10:46.891249579 -0700
+diff -ur cinelerra-4.4.orig/cinelerra/patchbay.C cinelerra-4.4/cinelerra/patchbay.C
+--- cinelerra-4.4.orig/cinelerra/patchbay.C	2012-09-08 22:21:43.206897155 -0700
++++ cinelerra-4.4/cinelerra/patchbay.C	2012-09-08 22:28:25.243536362 -0700
 @@ -177,6 +177,12 @@
  	mode_icons[TRANSFER_MIN] = new BC_Pixmap(this, 
  		mwindow->theme->get_image("mode_min"),
@@ -113,14 +110,14 @@ diff -ru cinelerra-4.3.orig/cinelerra/patchbay.C cinelerra-4.3/cinelerra/patchba
  
  	add_subwindow(nudge_popup = new NudgePopup(mwindow, this));
  	nudge_popup->create_objects();
-diff -ru cinelerra-4.3.orig/cinelerra/playback3d.C cinelerra-4.3/cinelerra/playback3d.C
---- cinelerra-4.3.orig/cinelerra/playback3d.C	2011-07-26 12:20:00.000000000 -0700
-+++ cinelerra-4.3/cinelerra/playback3d.C	2011-08-07 17:12:59.318951297 -0700
-@@ -181,6 +181,35 @@
- 	"	gl_FragColor.a = min(gl_FragColor.a, canvas.a);\n"
+diff -ur cinelerra-4.4.orig/cinelerra/playback3d.C cinelerra-4.4/cinelerra/playback3d.C
+--- cinelerra-4.4.orig/cinelerra/playback3d.C	2012-09-08 22:21:43.190231183 -0700
++++ cinelerra-4.4/cinelerra/playback3d.C	2012-09-08 22:33:36.663770215 -0700
+@@ -226,6 +226,35 @@
+ 	"	gl_FragColor = vec4(result, max(gl_FragColor.a, canvas.a));\n"
  	"}\n";
  
-+static char *blend_softlight_frag = 
++static const char *blend_softlight_frag = 
 +	"uniform sampler2D tex2;\n"
 +	"uniform vec2 tex2_dimensions;\n"
 +	"void main()\n"
@@ -135,7 +132,7 @@ diff -ru cinelerra-4.3.orig/cinelerra/playback3d.C cinelerra-4.3/cinelerra/playb
 +	"       gl_FragColor.a = max(gl_FragColor.a, canvas.a);\n"
 +	"}\n";
 +
-+static char *blend_screen_frag = 
++static const char *blend_screen_frag = 
 +	"uniform sampler2D tex2;\n"
 +	"uniform vec2 tex2_dimensions;\n"
 +	"void main()\n"
@@ -149,9 +146,9 @@ diff -ru cinelerra-4.3.orig/cinelerra/playback3d.C cinelerra-4.3/cinelerra/playb
 +	"       gl_FragColor.a = max(gl_FragColor.a, canvas.a);\n"
 +	"}\n";
 +
- static const char *blend_subtract_frag = 
- 	"uniform sampler2D tex2;\n"
- 	"uniform vec2 tex2_dimensions;\n"
+ static const char *multiply_alpha_frag = 
+ 	"void main()\n"
+ 	"{\n"
 @@ -1039,6 +1068,16 @@
  				if(!total_shaders) shader_stack[total_shaders++] = read_texture_frag;
  				shader_stack[total_shaders++] = blend_divide_frag;
@@ -169,21 +166,21 @@ diff -ru cinelerra-4.3.orig/cinelerra/playback3d.C cinelerra-4.3/cinelerra/playb
  		}
  
  		unsigned int frag_shader = 0;
-diff -ru cinelerra-4.3.orig/cinelerra/theme.C cinelerra-4.3/cinelerra/theme.C
---- cinelerra-4.3.orig/cinelerra/theme.C	2009-08-04 11:41:16.000000000 -0700
-+++ cinelerra-4.3/cinelerra/theme.C	2011-08-07 17:13:34.929230000 -0700
-@@ -137,6 +137,8 @@
+diff -ur cinelerra-4.4.orig/cinelerra/theme.C cinelerra-4.4/cinelerra/theme.C
+--- cinelerra-4.4.orig/cinelerra/theme.C	2012-09-08 22:21:43.210230350 -0700
++++ cinelerra-4.4/cinelerra/theme.C	2012-09-08 22:34:32.604751803 -0700
+@@ -141,6 +141,8 @@
  	new_image("mode_normal", "mode_normal.png");
  	new_image("mode_replace", "mode_replace.png");
  	new_image("mode_subtract", "mode_subtract.png");
 +	new_image("mode_softlight", "mode_softlight.png");
 +	new_image("mode_screen", "mode_screen.png");
- }
  
  
-diff -ru cinelerra-4.3.orig/cinelerra/vpatchgui.C cinelerra-4.3/cinelerra/vpatchgui.C
---- cinelerra-4.3.orig/cinelerra/vpatchgui.C	2009-01-02 16:22:10.000000000 -0800
-+++ cinelerra-4.3/cinelerra/vpatchgui.C	2011-08-07 17:14:31.799675418 -0700
+ // Images all themes have
+diff -ur cinelerra-4.4.orig/cinelerra/vpatchgui.C cinelerra-4.4/cinelerra/vpatchgui.C
+--- cinelerra-4.4.orig/cinelerra/vpatchgui.C	2012-09-08 22:21:43.223563131 -0700
++++ cinelerra-4.4/cinelerra/vpatchgui.C	2012-09-08 22:35:49.948167613 -0700
 @@ -335,6 +335,8 @@
  	add_item(new VModePatchItem(this, mode_to_text(TRANSFER_REPLACE), TRANSFER_REPLACE));
  	add_item(new VModePatchItem(this, mode_to_text(TRANSFER_MAX), TRANSFER_MAX));
@@ -200,7 +197,7 @@ diff -ru cinelerra-4.3.orig/cinelerra/vpatchgui.C cinelerra-4.3/cinelerra/vpatch
 +		case TRANSFER_SOFTLIGHT:
 +			return _("Soft Light");
 +			break;
-+
++		
 +		case TRANSFER_SCREEN:
 +			return _("Screen");
 +			break;
@@ -208,13 +205,13 @@ diff -ru cinelerra-4.3.orig/cinelerra/vpatchgui.C cinelerra-4.3/cinelerra/vpatch
  		default:
  			return _("Normal");
  			break;
-diff -ru cinelerra-4.3.orig/plugins/overlay/overlay.C cinelerra-4.3/plugins/overlay/overlay.C
---- cinelerra-4.3.orig/plugins/overlay/overlay.C	2011-07-26 12:20:03.000000000 -0700
-+++ cinelerra-4.3/plugins/overlay/overlay.C	2011-08-07 17:21:03.962757282 -0700
-@@ -208,6 +208,13 @@
- 		case TRANSFER_MIN:
+diff -ur cinelerra-4.4.orig/plugins/overlay/overlay.C cinelerra-4.4/plugins/overlay/overlay.C
+--- cinelerra-4.4.orig/plugins/overlay/overlay.C	2012-09-08 22:21:43.310226199 -0700
++++ cinelerra-4.4/plugins/overlay/overlay.C	2012-09-08 22:41:31.980466817 -0700
+@@ -207,6 +207,14 @@
  			return "Min";
  			break;
+ 
 +		case TRANSFER_SOFTLIGHT:
 +			return "Soft Light";
 +			break;
@@ -222,13 +219,15 @@ diff -ru cinelerra-4.3.orig/plugins/overlay/overlay.C cinelerra-4.3/plugins/over
 +		case TRANSFER_SCREEN:
 +			return "Screen";
 +			break;
- 
++
  		default:
  			return "Normal";
-@@ -591,6 +598,25 @@
- 	static char *blend_subtract_frag = 
- 		"	result_color.rgb = dst_color.rgb - src_color.rgb;\n";
- 
+ 			break;
+@@ -598,6 +606,26 @@
+ 		"	if(src_color.r == 0.0) result_color.r = 1.0;\n"
+ 		"	if(src_color.g == 0.0) result_color.g = 1.0;\n"
+ 		"	if(src_color.b == 0.0) result_color.b = 1.0;\n";
++	
 +	static char *blend_softlight_frag_float = 
 +		"       vec4 multiply;\n"
 +		"       multiply.rgb = dst_color.rgb*src_color.rgb;\n"
@@ -249,17 +248,18 @@ diff -ru cinelerra-4.3.orig/plugins/overlay/overlay.C cinelerra-4.3/plugins/over
 +	static char *blend_screen_frag_16bit = 
 +		"       result_color.rgb = 0xffff-((0xffff-dst_color.rgb)*(0xffff-src_color.rgb)/0xffff);\n"
  
- 	static char *blend_multiply_frag = 
- 		"	result_color.rgb = dst_color.rgb * src_color.rgb;\n";
-@@ -663,6 +689,7 @@
+ 
+ 	VFrame *src = temp;
+@@ -661,6 +689,8 @@
  		src->bind_texture(0);
  		dst->bind_texture(1);
  
 +		int colormodel = dst->get_color_model();
++
  
  		shader_stack[current_shader++] = get_pixels_frag;
  
-@@ -686,6 +713,30 @@
+@@ -684,6 +714,30 @@
  			case TRANSFER_MIN:
  				shader_stack[current_shader++] = blend_min_frag;
  				break;
@@ -274,7 +274,7 @@ diff -ru cinelerra-4.3.orig/plugins/overlay/overlay.C cinelerra-4.3/plugins/over
 +					shader_stack[current_shader++] = blend_softlight_frag_8bit;
 +				else
 +					shader_stack[current_shader++] = blend_softlight_frag_16bit;
-+					break;
++				break;
 +			case TRANSFER_SCREEN:
 +				if (colormodel == BC_RGB_FLOAT ||
 +				    colormodel == BC_RGBA_FLOAT)
@@ -286,14 +286,14 @@ diff -ru cinelerra-4.3.orig/plugins/overlay/overlay.C cinelerra-4.3/plugins/over
 +					shader_stack[current_shader++] = blend_screen_frag_8bit;
 +				else
 +					shader_stack[current_shader++] = blend_screen_frag_16bit;
-+					break;
++				break;
  		}
  
  		shader_stack[current_shader++] = put_pixels_frag;
-diff -ru cinelerra-4.3.orig/plugins/suv/suv.C cinelerra-4.3/plugins/suv/suv.C
---- cinelerra-4.3.orig/plugins/suv/suv.C	2010-11-09 16:19:53.000000000 -0800
-+++ cinelerra-4.3/plugins/suv/suv.C	2011-08-07 17:28:19.756095216 -0700
-@@ -444,6 +444,8 @@
+diff -ur cinelerra-4.4.orig/plugins/suv/suv.C cinelerra-4.4/plugins/suv/suv.C
+--- cinelerra-4.4.orig/plugins/suv/suv.C	2012-09-08 22:21:43.343558147 -0700
++++ cinelerra-4.4/plugins/suv/suv.C	2012-09-08 22:42:48.863905773 -0700
+@@ -463,6 +463,8 @@
  	new_image("mode_subtract", "mode_subtract.png");
  	new_image("mode_max", "mode_max.png");
  	new_image("mode_min", "mode_min.png");
