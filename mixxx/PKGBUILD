@@ -1,35 +1,31 @@
-# $Id: PKGBUILD 40367 2011-02-23 14:19:01Z lfleischer $
+# $Id: PKGBUILD 73315 2012-07-06 08:33:12Z lfleischer $
 # Maintainer: Lukas Fleischer <archlinux at cryptocrack dot de>
 # Contributor: Ali H. Caliskan <ali.h.caliskan AT gmail DOT com>
 # Contributor: Ryan Coyner <rcoyner@gmail.com>
 # Contributor: Stefan Husmann <stefan-husmann@t-online.de>
-# Contributor: Garrett <floft.net/contact>
 
 pkgname=mixxx
-pkgver=1.9.0
-pkgrel=2
-pkgdesc="Free, open source software for digital DJ'ing. (with volume-fade patch)"
+pkgver=1.10.1
+pkgrel=1
+pkgdesc="Free, open source software for digital DJ'ing."
 arch=('i686' 'x86_64')
 url='http://www.mixxx.org'
 license=('GPL')
 depends=('fftw' 'libid3tag' 'libmad' 'libogg' 'libshout' 'libsndfile' 'portaudio' 'portmidi'
-         'qt>=4.5' 'taglib')
+         'qt>=4.5' 'taglib' 'qtwebkit')
 makedepends=('mesa' 'scons' 'libshout')
-source=("http://downloads.mixxx.org/${pkgname}-${pkgver}/${pkgname}-${pkgver}-src.tar.gz" volume-fade.patch)
-md5sums=('ea78fc81922e6c7d85d6afffd2e526b1' 'b843d2f3e78718ea3fc30d45292fc076')
+source=("http://downloads.mixxx.org/${pkgname}-${pkgver}/${pkgname}-${pkgver}-src.tar.gz"
+	"volume-fade2.patch")
+md5sums=('765bc5216ec8102c2186dd3ea80187a9'
+	'd7fc2c929a0c6b9a97d9bb5dccfc7ece')
 
 build() {
-  cd "${srcdir}/${pkgname}-${pkgver}"\~*
-  #volume patch
-  cd src
-  patch -p0 < $srcdir/volume-fade.patch
-  cd ..
-  #compile
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  patch -Np1 < "$srcdir/volume-fade2.patch"
   scons qtdir=/usr/lib/qt prefix=/usr install_root="${pkgdir}/usr"
 }
 
 package() {
-  cd "${srcdir}/${pkgname}-${pkgver}"\~*
-  #install
+  cd "${srcdir}/${pkgname}-${pkgver}"
   scons qtdir=/usr/lib/qt prefix=/usr install_root="${pkgdir}/usr" install
 }
