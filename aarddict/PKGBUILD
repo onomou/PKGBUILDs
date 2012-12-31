@@ -1,0 +1,21 @@
+# Contributor: Jeffery MacEachern <j.maceachern@gmail.com>
+# Contributor: Garrett <floft.net/contact>
+pkgname=aarddict
+pkgver=0.9.3
+pkgrel=1
+pkgdesc="Aard Dictionary is a multiplatform dictionary and offline Wikipedia reader."
+arch=(any)
+url="http://aarddict.org/"
+license=(GPL)
+depends=('python' 'python2-pyicu' 'python2-simplejson' 'hicolor-icon-theme' 'python2-pyqt')
+makedepends=('python2-distribute')
+install=aarddict.install
+source=(aarddict-desktop.zip::http://github.com/aarddict/desktop/zipball/0.9.3 aarddict.install)
+md5sums=('58c4cb39e45d88b0d45e8aa89a50a25d'
+         '4d14628e16252af7ddf562ad19e3bcb4')
+
+build() {
+	cd "$srcdir/aarddict-desktop-"*
+	python2 setup.py install --root="$pkgdir/"
+	rm -rf "$pkgdir/usr/lib/python2.7/site-packages/tests"
+}
