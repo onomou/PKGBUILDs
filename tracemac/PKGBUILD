@@ -1,0 +1,29 @@
+# Maintainer: Garrett <floft.net/contact>
+pkgname=tracemac
+pkgver=0.02
+_netmrg_pkgver=0.20
+pkgrel=1
+pkgdesc="traces a MAC address through Cisco switches using SNMP"
+arch=('any')
+url='http://www.thtech.net/open-source-projects/tracemac/'
+license=('GPLv2')
+depends=('rrdtool')
+source=("http://www.thtech.net/downloads/tracemac/tracemac-${pkgver}.tar.gz"
+	"http://www.netmrg.net/download/release/netmrg-${_netmrg_pkgver}.tar.gz")
+md5sums=('6279419dd93623934a8dcfc48728df23'
+	 '47bec3b8a4d3a5c06c70925ee8d280be')
+
+build() {
+  cd "$srcdir/netmrg-${_netmrg_pkgver}"
+
+  ./configure --prefix="/usr"
+  make
+  make DESTDIR="$pkgdir" install
+  
+  cd "src/"
+  cp "$srcdir/tracemac/"{tracemac.cpp,maketracemac.sh} ./
+  ./maketracemac.sh
+
+  mkdir -p "$pkgdir/usr/bin/"
+  mv tracemac "$pkgdir/usr/bin/"
+}
