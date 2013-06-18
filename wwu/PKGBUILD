@@ -1,0 +1,16 @@
+# Maintainer: Garrett <floft.net/contact>
+pkgname=wwu
+pkgver=1
+pkgrel=1
+pkgdesc="symlinks"
+arch=('any')
+license=('GPL')
+source=()
+md5sums=()
+
+build() {
+    mkdir -p "$pkgdir/usr/bin"
+    cd "$pkgdir/usr/bin"
+    ln -s "/home/garrett/Downloads/WWU/maple16/bin/xmaple" "$pkgdir/usr/bin/maple"
+    ln -s "/home/garrett/Downloads/WWU/Matlab2012b/bin/matlab" "$pkgdir/usr/bin/matlab"
+}

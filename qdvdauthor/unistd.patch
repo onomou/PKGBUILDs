@@ -1,0 +1,13 @@
+diff -ur qdvdauthor-2.3.0/qdvdauthor/qdvdauthor.h qdvdauthor-2.3.0.new/qdvdauthor/qdvdauthor.h
+--- qdvdauthor-2.3.0/qdvdauthor/qdvdauthor.h	2011-12-28 06:26:51.000000000 -0800
++++ qdvdauthor-2.3.0.new/qdvdauthor/qdvdauthor.h	2013-03-18 09:05:40.451171531 -0700
+@@ -15,6 +15,9 @@
+ #ifndef QDVDAUTHOR_H
+ #define QDVDAUTHOR_H
+ 
++// A quick hack to get this to compile...
++#include <unistd.h>
++
+ 
+ class QDomNode;
+ class QDomElement;
