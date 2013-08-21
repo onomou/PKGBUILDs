@@ -1,0 +1,18 @@
+pkgname=python2-path-and-address
+pkgver=0.2.0
+pkgrel=1
+pkgdesc="Functions for server CLI applications used by humans."
+arch=(any)
+url="https://github.com/joeyespo/path-and-address"
+license=('MIT')
+depends=('python2')
+options=(!emptydirs)
+source=("https://pypi.python.org/packages/source/p/path-and-address/path-and-address-${pkgver}.zip")
+md5sums=('6acab2cfea1bec193fff7099873ff7c8')
+
+package() {
+  cd "$srcdir/path-and-address-${pkgver}"
+  python2 setup.py install --root="$pkgdir/" --optimize=1
+}
+
+# vim:set ts=2 sw=2 et:

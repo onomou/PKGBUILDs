@@ -1,0 +1,23 @@
+pkgname=python2-grip
+pkgver=1.2.0
+pkgrel=1
+pkgdesc="Preview GitHub Markdown files like Readme locally before committing them"
+arch=(any)
+url="https://github.com/joeyespo/grip"
+license=('MIT')
+depends=('python2' 'python2-markdown' 'python2-flask' 'python2-jinja'
+  'python2-docopt' 'python2-requests' 'python2-path-and-address')
+options=(!emptydirs)
+source=("https://pypi.python.org/packages/source/g/grip/grip-${pkgver}.zip")
+md5sums=('bb29f92e24abd328a374714d1978b290')
+
+package() {
+  cd "$srcdir/grip-${pkgver}"
+
+  rm -f requirements.txt
+  touch requirements.txt
+
+  python2 setup.py install --root="$pkgdir/" --optimize=1
+}
+
+# vim:set ts=2 sw=2 et:
