@@ -1,9 +1,0 @@
-[Unit]
-Description=System stats recorder
-
-[Service]
-EnvironmentFile=/etc/conf.d/sysstat
-ExecStart=/usr/lib/sa/sadc -L -F $SADC_OPTIONS -
-
-[Install]
-WantedBy=multi-user.target
