@@ -1,0 +1,37 @@
+--- unclutter.c.bak	2013-10-09 15:42:28.559547676 -0700
++++ unclutter.c	2013-10-09 16:07:50.615902641 -0700
+@@ -41,6 +41,7 @@
+ 	-reset			reset the timer whenever cursor becomes\n\
+ 					visible even if it hasn't moved\n\
+  	-root	       		apply to cursor on root window too\n\
++	-rootonly 	        apply to cursor ONLY on root window\n\
+ 	-onescreen		apply only to given screen of display\n\
+  	-visible       		ignore visibility events\n\
+  	-noevents      		dont send pseudo events\n\
+@@ -120,7 +121,7 @@
+ main(argc,argv)char **argv;{
+     Display *display;
+     int screen,oldx = -99,oldy = -99,numscreens;
+-    int doroot = 0, jitter = 0, idletime = 5, usegrabmethod = 0, waitagain = 0,
++    int doroot = 0, dorootonly = 0, jitter = 0, idletime = 5, usegrabmethod = 0, waitagain = 0,
+ 	dovisible = 1, doevents = 1, onescreen = 0;
+     Cursor *cursor;
+     Window *realroot;
+@@ -144,6 +145,8 @@
+ 	    doevents = 0;
+ 	}else if(strcmp(*argv,"-root")==0){
+ 	    doroot = 1;
++	}else if(strcmp(*argv,"-rootonly")==0){
++	    dorootonly = 1;
+ 	}else if(strcmp(*argv,"-grab")==0){
+ 	    usegrabmethod = 1;
+ 	}else if(strcmp(*argv,"-reset")==0){
+@@ -225,7 +228,7 @@
+ 			pexit("not on a known screen");
+ 		}
+ 		root = VirtualRootWindow(display,screen);
+-	    }else if((!doroot && windowin==None) || (modifs & ANYBUTTON) ||
++	    }else if((!doroot && !dorootonly && windowin==None) || (dorootonly && !doroot && windowin!=None) || (modifs & ANYBUTTON) ||
+ 		     !(ALMOSTEQUAL(rootx,oldx) && ALMOSTEQUAL(rooty,oldy))){
+ 		oldx = rootx, oldy = rooty;
+ 	    }else if(windowin==None){
