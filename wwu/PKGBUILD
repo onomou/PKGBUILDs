@@ -12,5 +12,5 @@ build() {
     mkdir -p "$pkgdir/usr/bin"
     cd "$pkgdir/usr/bin"
     ln -s "/home/garrett/Downloads/WWU/maple16/bin/xmaple" "$pkgdir/usr/bin/maple"
-    ln -s "/home/garrett/Downloads/WWU/Matlab2012b/bin/matlab" "$pkgdir/usr/bin/matlab"
+    ln -s "/home/garrett/Downloads/WWU/Matlab2013a/bin/matlab" "$pkgdir/usr/bin/matlab"
 }
